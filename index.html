@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ramo de Tulipanes 🌷</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            background: linear-gradient(to top, #000428, #004e92);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            color: white;
+            flex-direction: column;
+            /* Stack vertically */
+        }
+
+        /* Intro Screen Styles */
+        .intro-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to top, #000428, #004e92);
+            z-index: 100;
+            transition: opacity 1s ease-out;
+        }
+
+        .gift-box {
+            font-size: 100px;
+            cursor: pointer;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+            animation: bounce 2s infinite;
+            margin-bottom: 30px;
+        }
+
+        .start-btn {
+            padding: 15px 30px;
+            font-size: 24px;
+            background: #ff4081;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 64, 129, 0.4);
+            transition: transform 0.2s, background 0.2s;
+            font-family: inherit;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.1);
+            background: #f50057;
+        }
+
+        /* Main Container for Bouquet and Text */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+            /* Hidden initially */
+            transition: opacity 1.5s ease-in;
+            pointer-events: none;
+        }
+
+        .main-content.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Bouquet Styles (Initially Hidden) */
+        .bunch-container {
+            position: relative;
+            width: 500px;
+            height: 60vh;
+            /* Reduced height to fit text */
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+
+        .stem {
+            position: absolute;
+            background-color: #4a8c3d;
+            width: 4px;
+            bottom: 0;
+            /* Relative to container */
+            transform-origin: bottom center;
+            border-radius: 2px;
+            opacity: 0.9;
+        }
+
+        .flower {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translateX(-50%);
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .tulip {
+            font-size: 50px;
+            filter: hue-rotate(220deg) drop-shadow(0 5px 5px rgba(0, 0, 0, 0.3));
+            animation: sway 4s ease-in-out infinite;
+            transition: transform 0.3s;
+        }
+
+        .flower:hover .tulip {
+            transform: scale(1.3);
+            filter: hue-rotate(220deg) drop-shadow(0 0 15px rgba(0, 191, 255, 0.8));
+        }
+
+        .message {
+            background: rgba(255, 255, 255, 0.95);
+            color: #0d47a1;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: -5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            opacity: 0.9;
+            white-space: nowrap;
+            animation: float-text 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .ribbon {
+            position: absolute;
+            bottom: -40px;
+            /* Adjusted due to container height change */
+            font-size: 80px;
+            z-index: 20;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.5));
+            animation: pulse 3s infinite;
+        }
+
+        .leaf-left,
+        .leaf-right {
+            position: absolute;
+            bottom: -20px;
+            width: 100px;
+            height: 200px;
+            background: #2d5a27;
+            border-radius: 100% 0 100% 0;
+            z-index: 5;
+        }
+
+        .leaf-left {
+            transform: rotate(-30deg) skewY(10deg);
+            left: 30%;
+        }
+
+        .leaf-right {
+            border-radius: 0 100% 0 100%;
+            transform: rotate(30deg) skewY(-10deg);
+            right: 30%;
+        }
+
+        /* Message Box Styles */
+        .text-message {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            margin-bottom: 40px;
+            max-width: 600px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-size: 18px;
+            line-height: 1.5;
+            color: #e0f7fa;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out 2s, transform 1s ease-out 2s;
+            /* Delayed appearance */
+        }
+
+        .main-content.active .text-message {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes sway {
+
+            0%,
+            100% {
+                transform: rotate(-3deg);
+            }
+
+            50% {
+                transform: rotate(3deg);
+            }
+        }
+
+        @keyframes float-text {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-20px);
+            }
+
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Intro Screen -->
+    <div class="intro-container" id="intro">
+        <div class="gift-box">🎁</div>
+        <button class="start-btn" onclick="startSurprise()">Feliz San Valentín 💙</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="bunch-container" id="bouquet">
+            <div class="leaf-left"></div>
+            <div class="leaf-right"></div>
+            <div class="ribbon">🎀</div>
+            <!-- Flores generadas aquí -->
+        </div>
+
+        <div class="text-message">
+            Aquí puedes escribir tu mensaje especial. Por ejemplo: <br>
+            "En este día tan especial, quiero recordarte lo mucho que significas para mí. Eres la luz de mis días y la
+            calma de mis noches. ¡Feliz San Valentín!"
+        </div>
+    </div>
+
+    <script>
+        // const words array removed
+
+        const container = document.getElementById('bouquet');
+        const intro = document.getElementById('intro');
+        const mainContent = document.getElementById('mainContent');
+        const baseHeight = 0; // Adjusted base for new layout
+
+        function startSurprise() {
+            // Fade out intro
+            intro.style.opacity = '0';
+            setTimeout(() => {
+                intro.style.display = 'none';
+
+                // Show bouquet and text
+                mainContent.classList.add('active');
+
+                // Generate a large volume of flowers
+                const totalFlowers = 50;
+                for (let i = 0; i < totalFlowers; i++) {
+                    setTimeout(() => createFlower(i, totalFlowers), i * 30);
+                }
+            }, 1000); // Wait for fade out
+        }
+
+        function createFlower(index, total) {
+            // Randomize angle within a range based on index to spread them out
+            // Using a gaussian-like distribution for density in the middle?
+            // Simple random spread is fine for volume
+            const angleRange = 100;
+            const randomFactor = (Math.random() - 0.5) * 20; // -10 to 10 deg random variance
+            const spread = (index / (total - 1)) * angleRange - (angleRange / 2);
+            const angle = spread + randomFactor;
+
+            const radian = angle * (Math.PI / 180);
+
+            // Varied heights for depth
+            const stemLength = 200 + Math.random() * 250;
+
+            const stem = document.createElement('div');
+            stem.className = 'stem';
+            stem.style.height = '0px'; // Animación de crecimiento del tallo
+            stem.style.left = '50%';
+            stem.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+            stem.style.transition = 'height 1s ease-out';
+            stem.style.zIndex = Math.floor(Math.random() * 5); // Z-index for layering stems
+            container.appendChild(stem);
+
+            // Trigger stem growth
+            setTimeout(() => {
+                stem.style.height = stemLength + 'px';
+            }, 10);
+
+            const flowerX = Math.sin(radian) * stemLength;
+            const flowerY = Math.cos(radian) * stemLength + baseHeight;
+
+            const flower = document.createElement('div');
+            flower.className = 'flower';
+            flower.style.left = `calc(50% + ${flowerX}px)`;
+            flower.style.bottom = `${flowerY - 15}px`;
+            flower.style.opacity = '0'; // Start hidden
+            flower.style.transition = 'opacity 0.5s ease-in 1s, transform 0.3s'; // Fade in after stem grows
+            flower.style.zIndex = 10 + Math.floor(Math.random() * 10); // Higher z-index for flowers
+
+            // Random delay for sway animation so they don't move in unison
+            const delay = Math.random() * -5;
+
+            // Random scale for variety
+            const scale = 0.8 + Math.random() * 0.4;
+
+            flower.innerHTML = `
+                <div class="tulip" style="animation-delay: ${delay}s; transform: scale(${scale});">🌷</div>
+            `;
+
+            container.appendChild(flower);
+
+            // Show flower head
+            setTimeout(() => {
+                flower.style.opacity = '1';
+            }, 800 + Math.random() * 500);
+        }
+    </script>
+</body>
+
+</html>
