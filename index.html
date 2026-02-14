@@ -172,29 +172,94 @@
             right: 30%;
         }
 
-        /* Message Box Styles */
-        .text-message {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
-            backdrop-filter: blur(5px);
-            margin-bottom: 40px;
-            max-width: 600px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            font-size: 18px;
-            line-height: 1.5;
-            color: #e0f7fa;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1s ease-out 2s, transform 1s ease-out 2s;
-            /* Delayed appearance */
+        /* Letter Icon Styles */
+        .letter-container {
+            margin-top: 20px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.3));
+            animation: float-letter 3s ease-in-out infinite;
+            z-index: 50;
+            /* Above tulips if needed */
         }
 
-        .main-content.active .text-message {
+        .letter-container:hover {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .envelope {
+            font-size: 80px;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 4, 40, 0.85);
+            /* Semi-transparent dark blue backdrop */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .modal-overlay.open {
             opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            color: #e0f7fa;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.5s ease;
+            max-height: 80vh;
+            overflow-y: auto;
+            /* Scroller if text is too long for screen */
+        }
+
+        .modal-overlay.open .modal-content {
             transform: translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #ff4081;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #f50057;
+        }
+
+        /* Adjusted Text Message Styles for Modal */
+        .text-message {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            /* Removed opacity and transform for initial hidden state, now handled by modal */
+            /* Removed background, padding, border, box-shadow, etc. as they are handled by modal-content */
+            /* Kept font-size, line-height, margin-bottom, text-align, color */
         }
 
         @keyframes sway {
@@ -233,6 +298,58 @@
             }
         }
 
+        @keyframes float-letter {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Spotify Button Styles */
+        .spotify-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #1DB954;
+            /* Spotify Green */
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(29, 185, 84, 0.4);
+            /* Removed opacity and transform for initial hidden state, now handled by modal */
+            /* Removed animation: fadeInUp 1s ease-out 3s forwards; */
+        }
+
+        .spotify-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            background: #1ed760;
+            box-shadow: 0 6px 20px rgba(29, 185, 84, 0.6);
+        }
+
+        .spotify-icon {
+            width: 24px;
+            height: 24px;
+            fill: white;
+            margin-right: 10px;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         @keyframes bounce {
 
             0%,
@@ -259,7 +376,7 @@
     <!-- Intro Screen -->
     <div class="intro-container" id="intro">
         <div class="gift-box">🎁</div>
-        <button class="start-btn" onclick="startSurprise()">Feliz San Valentín 💙</button>
+        <button class="start-btn" onclick="startSurprise()">Ábreme</button>
     </div>
 
     <!-- Main Content -->
@@ -271,10 +388,38 @@
             <!-- Flores generadas aquí -->
         </div>
 
-        <div class="text-message">
-            Aquí puedes escribir tu mensaje especial. Por ejemplo: <br>
-            "En este día tan especial, quiero recordarte lo mucho que significas para mí. Eres la luz de mis días y la
-            calma de mis noches. ¡Feliz San Valentín!"
+        <!-- Letter Icon -->
+        <div class="letter-container" onclick="openModal()">
+            <div class="envelope">💌</div>
+        </div>
+    </div>
+
+    <!-- Modal for Message -->
+    <div class="modal-overlay" id="messageModal">
+        <div class="modal-content">
+            <div class="close-btn" onclick="closeModal()">&times;</div>
+
+            <div class="text-message">
+                Sin necesidad de que sea un día especial como hoy, siempre te lo he dicho y siempre lo voy a pensar:
+                eres una chica increíble. Una chica 10/10, de esas que no se encuentran fácil, con una forma de ser que
+                simplemente te hace especial.<br><br>
+                Tal vez no siempre lo creas, o tal vez a veces lo olvides, pero es así. Mereces cosas bonitas, momentos
+                lindos, risas sinceras y personas que te valoren como corresponde.<br><br>
+                Hoy no podía dejar pasar la oportunidad de recordarte lo especial que eres, caradeloca.<br>
+                Que este día, mañana y siempre tengas esa bonita sonrisa que te caracteriza.<br><br>
+                Te dejo esta canción; tiene mucho significado y me recuerda a ti.<br>
+                Con cariño,<br>
+                Asnito ¿?
+            </div>
+
+            <a href="https://open.spotify.com/intl-es/track/4c6yjn6FdNfuRltmPFciJh?si=91246afbd1b74168" target="_blank"
+                class="spotify-btn">
+                <svg class="spotify-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141 4.32-1.32 9.84-.6 13.561 1.621.42.181.6.779.3 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.4-1.02 15.6 1.44.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
+                </svg>
+                Escúchame 🎵
+            </a>
         </div>
     </div>
 
@@ -284,6 +429,7 @@
         const container = document.getElementById('bouquet');
         const intro = document.getElementById('intro');
         const mainContent = document.getElementById('mainContent');
+        const modal = document.getElementById('messageModal');
         const baseHeight = 0; // Adjusted base for new layout
 
         function startSurprise() {
@@ -292,7 +438,7 @@
             setTimeout(() => {
                 intro.style.display = 'none';
 
-                // Show bouquet and text
+                // Show bouquet (and letter icon)
                 mainContent.classList.add('active');
 
                 // Generate a large volume of flowers
@@ -302,6 +448,21 @@
                 }
             }, 1000); // Wait for fade out
         }
+
+        function openModal() {
+            modal.classList.add('open');
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+        }
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
 
         function createFlower(index, total) {
             // Randomize angle within a range based on index to spread them out
