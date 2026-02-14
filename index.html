@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emily CaraDeLoca</title>
+    <title>Ramo de Tulipanes 🌷</title>
     <style>
         body {
             margin: 0;
@@ -449,29 +449,33 @@
 
             /* Modal adjustments */
             .modal-content {
-                padding: 20px;
-                width: 95%;
-                max-height: 85vh;
+                padding: 30px 20px;
+                width: 92%;
+                max-height: 80vh;
             }
 
             .text-message {
                 font-size: 15px;
-                line-height: 1.5;
-                margin-bottom: 20px;
+                line-height: 1.6;
+                margin-bottom: 25px;
+                text-align: left;
             }
 
             .spotify-btn {
-                padding: 10px 20px;
-                font-size: 14px;
+                padding: 12px 24px;
+                font-size: 15px;
+                margin-top: 10px;
             }
 
             .spotify-icon {
-                width: 20px;
-                height: 20px;
+                width: 22px;
+                height: 22px;
             }
 
             .close-btn {
-                font-size: 25px;
+                font-size: 28px;
+                top: 10px;
+                right: 15px;
             }
         }
 
@@ -517,18 +521,36 @@
                 margin-top: 8px;
             }
 
+            /* Modal for very small screens */
+            .modal-content {
+                padding: 25px 15px;
+                width: 95%;
+                max-height: 85vh;
+            }
+
             .text-message {
-                font-size: 13px;
-                line-height: 1.4;
+                font-size: 14px;
+                line-height: 1.5;
+                margin-bottom: 20px;
+                text-align: left;
             }
 
             .spotify-btn {
-                padding: 8px 16px;
-                font-size: 13px;
+                padding: 10px 20px;
+                font-size: 14px;
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .spotify-icon {
+                width: 20px;
+                height: 20px;
             }
 
             .close-btn {
-                font-size: 22px;
+                font-size: 26px;
+                top: 8px;
+                right: 12px;
             }
         }
     </style>
@@ -653,19 +675,20 @@
         });
 
         function createBouquet() {
-            // Adjust heights based on screen size
+            // Adjust heights and angles based on screen size
             const isMobile = window.innerWidth <= 768;
             const heightMultiplier = isMobile ? 0.6 : 1;
+            const angleMultiplier = isMobile ? 0.7 : 1; // Narrower fan on mobile
 
             // Tighter fan, closer together
             // Layer 1: Back, Taller
-            createFan(18, -50, 50, 420 * heightMultiplier, 500 * heightMultiplier, 0);
+            createFan(18, -50 * angleMultiplier, 50 * angleMultiplier, 420 * heightMultiplier, 500 * heightMultiplier, 0);
 
             // Layer 2: Middle, Medium
-            setTimeout(() => createFan(15, -40, 40, 350 * heightMultiplier, 420 * heightMultiplier, 1), 500);
+            setTimeout(() => createFan(15, -40 * angleMultiplier, 40 * angleMultiplier, 350 * heightMultiplier, 420 * heightMultiplier, 1), 500);
 
             // Layer 3: Front, Shorter
-            setTimeout(() => createFan(12, -30, 30, 250 * heightMultiplier, 320 * heightMultiplier, 2), 1000);
+            setTimeout(() => createFan(12, -30 * angleMultiplier, 30 * angleMultiplier, 250 * heightMultiplier, 320 * heightMultiplier, 2), 1000);
         }
 
         function createFan(count, angleMin, angleMax, heightExpMin, heightExpMax, layerIndex) {
@@ -733,4 +756,3 @@
 </body>
 
 </html>
-
