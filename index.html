@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Emily CaraDeLoca</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ramo de Tulipanes 🌷</title>
     <style>
         body {
             margin: 0;
@@ -393,6 +394,143 @@
                 transform: scale(1.2);
             }
         }
+
+        /* Responsive Design for Mobile */
+        @media (max-width: 768px) {
+
+            /* Center content vertically on mobile */
+            .main-content {
+                justify-content: center;
+            }
+
+            /* Intro Screen */
+            .gift-box {
+                font-size: 70px;
+            }
+
+            .start-btn {
+                padding: 12px 24px;
+                font-size: 20px;
+            }
+
+            /* Bouquet Container - Reduced height */
+            .bunch-container {
+                width: 90vw;
+                height: 40vh;
+                margin-bottom: 10px;
+            }
+
+            /* Smaller tulips */
+            .tulip {
+                font-size: 30px;
+            }
+
+            /* Ribbon and leaves */
+            .ribbon {
+                font-size: 50px;
+                bottom: -25px;
+            }
+
+            .leaf-left,
+            .leaf-right {
+                width: 60px;
+                height: 120px;
+                bottom: -15px;
+            }
+
+            /* Letter icon */
+            .envelope {
+                font-size: 55px;
+            }
+
+            .letter-container {
+                margin-top: 10px;
+            }
+
+            /* Modal adjustments */
+            .modal-content {
+                padding: 20px;
+                width: 95%;
+                max-height: 85vh;
+            }
+
+            .text-message {
+                font-size: 15px;
+                line-height: 1.5;
+                margin-bottom: 20px;
+            }
+
+            .spotify-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .spotify-icon {
+                width: 20px;
+                height: 20px;
+            }
+
+            .close-btn {
+                font-size: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            /* Extra small screens */
+            .gift-box {
+                font-size: 55px;
+                margin-bottom: 20px;
+            }
+
+            .start-btn {
+                padding: 10px 18px;
+                font-size: 16px;
+            }
+
+            .bunch-container {
+                width: 95vw;
+                height: 35vh;
+                margin-bottom: 8px;
+            }
+
+            .tulip {
+                font-size: 24px;
+            }
+
+            .ribbon {
+                font-size: 40px;
+                bottom: -20px;
+            }
+
+            .leaf-left,
+            .leaf-right {
+                width: 50px;
+                height: 100px;
+            }
+
+            .envelope {
+                font-size: 45px;
+            }
+
+            .letter-container {
+                margin-top: 8px;
+            }
+
+            .text-message {
+                font-size: 13px;
+                line-height: 1.4;
+            }
+
+            .spotify-btn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+
+            .close-btn {
+                font-size: 22px;
+            }
+        }
     </style>
 </head>
 
@@ -515,15 +653,19 @@
         });
 
         function createBouquet() {
+            // Adjust heights based on screen size
+            const isMobile = window.innerWidth <= 768;
+            const heightMultiplier = isMobile ? 0.6 : 1;
+
             // Tighter fan, closer together
             // Layer 1: Back, Taller
-            createFan(18, -50, 50, 420, 500, 0);
+            createFan(18, -50, 50, 420 * heightMultiplier, 500 * heightMultiplier, 0);
 
             // Layer 2: Middle, Medium
-            setTimeout(() => createFan(15, -40, 40, 350, 420, 1), 500);
+            setTimeout(() => createFan(15, -40, 40, 350 * heightMultiplier, 420 * heightMultiplier, 1), 500);
 
             // Layer 3: Front, Shorter
-            setTimeout(() => createFan(12, -30, 30, 250, 320, 2), 1000);
+            setTimeout(() => createFan(12, -30, 30, 250 * heightMultiplier, 320 * heightMultiplier, 2), 1000);
         }
 
         function createFan(count, angleMin, angleMax, heightExpMin, heightExpMax, layerIndex) {
