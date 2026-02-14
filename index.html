@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Emily CaraDeLocaaa</title>
+    <title>Emily CaraDeLoca</title>
     <style>
         body {
             margin: 0;
@@ -368,6 +368,31 @@
                 transform: translateY(-10px);
             }
         }
+
+        /* Stars Animation */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.2);
+            }
+        }
     </style>
 </head>
 
@@ -441,7 +466,37 @@
 
                 // Generate a symmetrical fan of flowers
                 createBouquet();
+
+                // Generate stars around bouquet
+                createStars();
             }, 1000); // Wait for fade out
+        }
+
+        function createStars() {
+            const count = 50;
+            const body = document.querySelector('body');
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+
+                // Random position across entire screen
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                star.style.left = x + '%';
+                star.style.top = y + '%';
+
+                // Random size
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+
+                // Random duration and delay
+                const duration = Math.random() * 2 + 1;
+                star.style.setProperty('--duration', duration + 's');
+                star.style.animationDelay = Math.random() * 3 + 's';
+
+                body.appendChild(star);
+            }
         }
 
         function openModal() {
