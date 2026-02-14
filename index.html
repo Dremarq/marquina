@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Ramo de Tulipanes 🌷</title>
+    <title>Emily CaraDeLocaaa</title>
     <style>
         body {
             margin: 0;
@@ -424,13 +424,11 @@
     </div>
 
     <script>
-        // const words array removed
-
         const container = document.getElementById('bouquet');
         const intro = document.getElementById('intro');
         const mainContent = document.getElementById('mainContent');
         const modal = document.getElementById('messageModal');
-        const baseHeight = 0; // Adjusted base for new layout
+        const baseHeight = 0;
 
         function startSurprise() {
             // Fade out intro
@@ -441,11 +439,8 @@
                 // Show bouquet (and letter icon)
                 mainContent.classList.add('active');
 
-                // Generate a large volume of flowers
-                const totalFlowers = 50;
-                for (let i = 0; i < totalFlowers; i++) {
-                    setTimeout(() => createFlower(i, totalFlowers), i * 30);
-                }
+                // Generate a symmetrical fan of flowers
+                createBouquet();
             }, 1000); // Wait for fade out
         }
 
@@ -464,27 +459,44 @@
             }
         });
 
-        function createFlower(index, total) {
-            // Randomize angle within a range based on index to spread them out
-            // Using a gaussian-like distribution for density in the middle?
-            // Simple random spread is fine for volume
-            const angleRange = 100;
-            const randomFactor = (Math.random() - 0.5) * 20; // -10 to 10 deg random variance
-            const spread = (index / (total - 1)) * angleRange - (angleRange / 2);
-            const angle = spread + randomFactor;
+        function createBouquet() {
+            // Tighter fan, closer together
+            // Layer 1: Back, Taller
+            createFan(18, -50, 50, 420, 500, 0);
 
+            // Layer 2: Middle, Medium
+            setTimeout(() => createFan(15, -40, 40, 350, 420, 1), 500);
+
+            // Layer 3: Front, Shorter
+            setTimeout(() => createFan(12, -30, 30, 250, 320, 2), 1000);
+        }
+
+        function createFan(count, angleMin, angleMax, heightExpMin, heightExpMax, layerIndex) {
+            const step = (angleMax - angleMin) / (count - 1);
+
+            for (let i = 0; i < count; i++) {
+                const angle = angleMin + (step * i);
+
+                // Parabolic height curve: Taller in center (angle 0), Shorter at edges
+                const normalizedAngle = Math.abs(angle) / ((angleMax - angleMin) / 2);
+                const heightDrop = Math.pow(normalizedAngle, 1.5) * (heightExpMax - heightExpMin);
+                const stemLength = heightExpMax - heightDrop;
+
+                setTimeout(() => createFlower(angle, stemLength, layerIndex), i * 50);
+            }
+        }
+
+        function createFlower(angle, stemLength, layerIndex) {
             const radian = angle * (Math.PI / 180);
-
-            // Varied heights for depth
-            const stemLength = 200 + Math.random() * 250;
 
             const stem = document.createElement('div');
             stem.className = 'stem';
-            stem.style.height = '0px'; // Animación de crecimiento del tallo
+            stem.style.height = '0px';
             stem.style.left = '50%';
             stem.style.transform = `translateX(-50%) rotate(${angle}deg)`;
             stem.style.transition = 'height 1s ease-out';
-            stem.style.zIndex = Math.floor(Math.random() * 5); // Z-index for layering stems
+            stem.style.zIndex = layerIndex; // Layering
+
             container.appendChild(stem);
 
             // Trigger stem growth
@@ -499,15 +511,15 @@
             flower.className = 'flower';
             flower.style.left = `calc(50% + ${flowerX}px)`;
             flower.style.bottom = `${flowerY - 15}px`;
-            flower.style.opacity = '0'; // Start hidden
-            flower.style.transition = 'opacity 0.5s ease-in 1s, transform 0.3s'; // Fade in after stem grows
-            flower.style.zIndex = 10 + Math.floor(Math.random() * 10); // Higher z-index for flowers
+            flower.style.opacity = '0';
+            flower.style.transition = 'opacity 0.5s ease-in 1s, transform 0.3s';
+            flower.style.zIndex = layerIndex + 10; // Flowers above stems
 
-            // Random delay for sway animation so they don't move in unison
+            // Calculate delay based on angle index
             const delay = Math.random() * -5;
 
-            // Random scale for variety
-            const scale = 0.8 + Math.random() * 0.4;
+            // Scale based on layer to add depth
+            const scale = 1 - (layerIndex * 0.1);
 
             flower.innerHTML = `
                 <div class="tulip" style="animation-delay: ${delay}s; transform: scale(${scale});">🌷</div>
@@ -518,7 +530,7 @@
             // Show flower head
             setTimeout(() => {
                 flower.style.opacity = '1';
-            }, 800 + Math.random() * 500);
+            }, 800 + Math.random() * 200);
         }
     </script>
 </body>
