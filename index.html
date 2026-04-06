@@ -749,15 +749,26 @@
 
             const rect = document.getElementById('beach').getBoundingClientRect();
             let correctionX = 1.0;
+            let scaleOverall = 1.0;
+            
             if (rect.width > 0 && rect.height > 0) {
                 const currentRatio = (rect.height / 160) / (rect.width / 1200);
-                const referenceRatio = 0.585;
+                const referenceRatio = 0.585; 
                 correctionX = currentRatio / referenceRatio;
+            }
+
+            // Si es un celular, reduzco drásticamente su tamaño y las alejo del centro
+            if (window.innerWidth <= 600) {
+                scaleOverall = 0.40;
+                
+                // Despeja el sol desplazando las palmeras internas a los bordes
+                palms[1].x -= 120;
+                palms[2].x += 120;
             }
 
             palms.forEach(p => {
                 const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-                g.setAttribute('transform', `translate(${p.x}, ${p.y}) scale(${p.s * correctionX}, ${p.s}) rotate(${p.t})`);
+                g.setAttribute('transform', `translate(${p.x}, ${p.y}) scale(${p.s * correctionX * scaleOverall}, ${p.s * scaleOverall}) rotate(${p.t})`);
 
                 const trunk = document.createElementNS('http://www.w3.org/2000/svg', 'path');
                 trunk.setAttribute('d', 'M-4,0 Q-2,-60 0,-115 Q2,-60 4,0 Z');
