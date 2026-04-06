@@ -465,14 +465,16 @@
                 font-size: .85rem;
                 margin-top: 1.4rem;
             }
-        } /* FIN DEL MEDIA QUERY DE MOVILES */
+        }
+
+        /* FIN DEL MEDIA QUERY DE MOVILES */
 
         /* THE SECRET TURTLE */
         #swimming-turtle-wrap {
             position: absolute;
             top: 45%;
             left: -80px;
-            z-index: 50; 
+            z-index: 50;
             animation: swimAcross 38s linear infinite;
             pointer-events: none;
         }
@@ -487,13 +489,23 @@
         }
 
         @keyframes swimAcross {
-            0% { transform: translateX(0vw); }
-            100% { transform: translateX(130vw); }
+            0% {
+                transform: translateX(0vw);
+            }
+
+            100% {
+                transform: translateX(130vw);
+            }
         }
 
         @keyframes bobbing {
-            0% { transform: translateY(0px) rotate(-4deg); }
-            100% { transform: translateY(8px) rotate(4deg); }
+            0% {
+                transform: translateY(0px) rotate(-4deg);
+            }
+
+            100% {
+                transform: translateY(8px) rotate(4deg);
+            }
         }
 
         /* SECRET MESSAGE */
@@ -520,10 +532,10 @@
         }
 
         /* SECRET MODE ENVIRONMENT DIMMING */
-        body.secret-mode #sun-wrap, 
-        body.secret-mode #ocean, 
-        body.secret-mode #beach, 
-        body.secret-mode #rays-clip, 
+        body.secret-mode #sun-wrap,
+        body.secret-mode #ocean,
+        body.secret-mode #beach,
+        body.secret-mode #rays-clip,
         body.secret-mode #hglow,
         body.secret-mode #clouds,
         body.secret-mode #particles,
@@ -533,7 +545,7 @@
             transition: opacity 4s ease, transform 4s ease;
             pointer-events: none;
         }
-        
+
         body.secret-mode #sky {
             opacity: 0.2 !important;
             transition: opacity 4s ease;
@@ -556,7 +568,7 @@
         <!-- OCEAN cubre todo debajo, incluyendo cualquier rayo que se filtre -->
         <div id="ocean">
             <div id="shimmer"></div>
-            
+
             <div id="swimming-turtle-wrap">
                 <div id="swimming-turtle" onclick="revealSecret(event)">
                     <svg width="100%" height="100%" viewBox="0 0 100 60" fill="#132035">
@@ -581,7 +593,7 @@
         </div>
 
         <div id="particles"></div>
-        
+
         <div id="secret-message">
             Contando los días para que seas mi enamorada...
         </div>
@@ -610,7 +622,7 @@
                 <div id="closing-wrap">
                     <span id="closing">Con mucho cariño,</span>
                     <div id="signature-row">
-                        <a href="https://open.spotify.com/intl-es/track/2318Aoqig6HS9YkHGlAm8T?si=70b127941ece418c"
+                        <a href="https://open.spotify.com/intl-es/track/7ns16ylM6sbxo9ZWIwyE5d?si=d2dc3ef4714d4e34"
                             target="_blank" rel="noopener noreferrer" id="spotify-link">
                             <svg viewBox="0 0 24 24" fill="#1ed760" xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -735,9 +747,17 @@
                 { x: 1080, y: 155, s: 4.2, t: 6 }
             ];
 
+            const rect = document.getElementById('beach').getBoundingClientRect();
+            let correctionX = 1.0;
+            if (rect.width > 0 && rect.height > 0) {
+                const currentRatio = (rect.height / 160) / (rect.width / 1200);
+                const referenceRatio = 0.585;
+                correctionX = currentRatio / referenceRatio;
+            }
+
             palms.forEach(p => {
                 const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-                g.setAttribute('transform', `translate(${p.x}, ${p.y}) scale(${p.s}) rotate(${p.t})`);
+                g.setAttribute('transform', `translate(${p.x}, ${p.y}) scale(${p.s * correctionX}, ${p.s}) rotate(${p.t})`);
 
                 const trunk = document.createElementNS('http://www.w3.org/2000/svg', 'path');
                 trunk.setAttribute('d', 'M-4,0 Q-2,-60 0,-115 Q2,-60 4,0 Z');
@@ -833,16 +853,16 @@
 
         /* RED DE CAPTURA DEL SECRETO */
         function revealSecret(e) {
-            if(e) e.stopPropagation();
-            closeLetter(); 
+            if (e) e.stopPropagation();
+            closeLetter();
             document.body.classList.add('secret-mode');
             setTimeout(() => {
                 document.getElementById('secret-message').classList.add('revealed');
-                
+
                 // Configurar click para salir del modo secreto
                 setTimeout(() => {
-                    document.body.addEventListener('click', hideSecret, {once: true});
-                    document.body.addEventListener('touchstart', hideSecret, {once: true});
+                    document.body.addEventListener('click', hideSecret, { once: true });
+                    document.body.addEventListener('touchstart', hideSecret, { once: true });
                 }, 500);
             }, 1000);
         }
@@ -852,58 +872,6 @@
             document.getElementById('secret-message').classList.remove('revealed');
         }
 
-        /* EFECTO 3D PARALLAX (Mouse & Acelerómetro) */
-        let tX = 0, tY = 0, cX = 0, cY = 0;
-        let pEnabled = false;
-
-        document.addEventListener('mousemove', (e) => {
-            tX = (e.clientX / window.innerWidth - 0.5) * 2;
-            tY = (e.clientY / window.innerHeight - 0.5) * 2;
-        });
-
-        function handleOrientation(e) {
-            if (e.gamma !== null && e.beta !== null) {
-                let x = e.gamma / 30; 
-                let y = (e.beta - 45) / 30; 
-                tX = Math.max(-1, Math.min(1, x));
-                tY = Math.max(-1, Math.min(1, y));
-            }
-        }
-
-        function initParallax() {
-            if (pEnabled) return;
-            pEnabled = true;
-            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-                DeviceOrientationEvent.requestPermission().then(perm => { 
-                    if (perm === 'granted') window.addEventListener('deviceorientation', handleOrientation); 
-                }).catch(console.error);
-            } else {
-                window.addEventListener('deviceorientation', handleOrientation);
-            }
-        }
-
-        document.body.addEventListener('click', initParallax, {once: true});
-        document.body.addEventListener('touchstart', initParallax, {once: true});
-
-        function parallaxLoop() {
-            cX += (tX - cX) * 0.05;
-            cY += (tY - cY) * 0.05;
-
-            // Transiciones adaptativas para generar el "volumen"
-            document.getElementById('sky').style.transform = `scale(1.1) translate(${cX * 6}px, ${cY * 6}px)`;
-            document.getElementById('clouds').style.transform = `scale(1.1) translate(${cX * 15}px, ${cY * 10}px)`;
-            
-            const sunWrap = document.getElementById('sun-wrap');
-            if (!document.body.classList.contains('secret-mode')) {
-                sunWrap.style.transform = `translate(calc(-50% + ${cX * 10}px), calc(-50% + ${cY * 10}px))`;
-            }
-
-            document.getElementById('ocean').style.transform = `scale(1.05) translateX(${cX * -4}px)`;
-            document.getElementById('beach').style.transform = `scale(1.1) translate(${cX * -20}px, ${cY * -10}px)`;
-
-            requestAnimationFrame(parallaxLoop);
-        }
-        parallaxLoop();
     </script>
 </body>
 
