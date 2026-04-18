@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuestra Historia</title>
+    <title>Historia para Chio</title>
     <!-- Incluyendo fuentes elegantes -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-        
+
         body {
-            /* Fondo elegante similar al cielo oscuro de Chio.html */
-            background: #0a0618;
-            background-image: radial-gradient(circle at center, #1a1e35 0%, #0a0618 100%);
+            /* Fondo de biblioteca antigua iluminada con luz de vela tenue */
+            background: #110b08;
+            background-image: radial-gradient(circle at center, #2e1d13 0%, #0d0805 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -26,7 +29,6 @@
             overflow: hidden;
         }
 
-        /* Contenedor con perspectiva para habilitar un efecto 3D realista */
         .book-wrapper {
             perspective: 1800px;
             width: 100%;
@@ -35,134 +37,205 @@
             align-items: center;
         }
 
-        /* El contenedor principal del libro */
         .book {
-            width: 320px;
+            width: 340px;
+            /* Un poco más ancho para dar presencia de clásico grueso */
             height: 480px;
             position: relative;
-            transform-style: preserve-3d; /* Permite a los hijos tener su propia posición en Z */
+            transform-style: preserve-3d;
             transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1);
         }
 
-        /* Cuando una hoja se voltea, centramos el lomo moviendo el libro a la derecha. */
         .book.open {
             transform: translateX(50%);
         }
 
-        /* Configuración base para cualquier hoja */
         .page {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            transform-origin: 0% 50%; /* Gira desde el eje izquierdo (el lomo) */
+            transform-origin: 0% 50%;
             transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1);
             transform-style: preserve-3d;
         }
 
-        /* Lados o caras de una hoja (Anverso y Reverso) */
-        .front, .back {
+        .front,
+        .back {
             position: absolute;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden; /* Oculta la cara cuando está dada vuelta en Y */
+            backface-visibility: hidden;
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
-        /* Dar forma curva al lado derecho del libro para simular hojas juntas */
         .front {
-            border-radius: 4px 15px 15px 4px;
-            box-shadow: inset 4px 0 10px rgba(0,0,0,0.1), 3px 3px 10px rgba(0,0,0,0.2);
-            cursor: pointer; /* Indicar al usuario que pase de página */
-        }
-
-        /* Lado izquierdo (reverso). Empieza rotado 180° y del revés. */
-        .back {
-            transform: rotateY(180deg);
-            border-radius: 15px 4px 4px 15px;
-            box-shadow: inset -4px 0 10px rgba(0,0,0,0.1), -3px 3px 10px rgba(0,0,0,0.2);
+            border-radius: 4px 12px 12px 4px;
+            box-shadow: inset 4px 0 10px rgba(0, 0, 0, 0.1), 3px 3px 10px rgba(0, 0, 0, 0.3);
             cursor: pointer;
         }
 
-        /* DISEÑO DE MATERIALES */
-        
-        /* HOJAS DE PAPEL (Interiores) */
-        .paper {
-            background-color: #f7f1e3;
-            /* Textura sutil y ruido tipo papel viejo */
-            background-image: 
-                radial-gradient(circle at center, transparent 0%, rgba(200, 180, 150, 0.1) 100%),
-                repeating-linear-gradient(rgba(0,0,0,0.01) 0px, rgba(0,0,0,0.01) 2px, transparent 2px, transparent 4px);
-            border: 1px solid #e0d5c1;
+        .back {
+            transform: rotateY(180deg);
+            border-radius: 12px 4px 4px 12px;
+            box-shadow: inset -4px 0 10px rgba(0, 0, 0, 0.1), -3px 3px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
         }
 
-        /* TAPAS (Portada y reverso) */
-        .cover-art, .cover-inside {
-            background-color: #1a1525;
-            background-image: radial-gradient(circle at center, #2c1b3d 0%, #150f1c 100%);
-            color: #f9c95e; 
-            border: 1px solid #3a2e4d;
+        /* MATERIALES: Papel Viejo (Pergamino) */
+        .paper {
+            background-color: #f4ebd8;
+            background-image:
+                radial-gradient(circle at center, transparent 60%, rgba(139, 69, 19, 0.18) 100%),
+                repeating-linear-gradient(rgba(0, 0, 0, 0.015) 0px, rgba(0, 0, 0, 0.015) 2px, transparent 2px, transparent 4px);
+            border: 1px solid #d2b48c;
+            box-shadow: inset 0 0 30px rgba(139, 69, 19, 0.2);
+            /* Bordes añejos */
+        }
+
+        /* MATERIALES: Portada de Cuero Viejo (A lo película mágica) */
+        .cover-art,
+        .cover-inside {
+            background-color: #5c3a21;
+            /* Color base marrón cuero rústico */
+            background-image: radial-gradient(circle at center, #7b4f2c 0%, #4a2d18 100%);
+            color: #d4af37;
+            /* Detalles dorados generales */
+            border: 1px solid #3b2210;
         }
 
         .cover-art {
             justify-content: center;
             align-items: center;
             text-align: center;
-            box-shadow: inset 10px 0 20px rgba(0,0,0,0.8), 6px 6px 15px rgba(0,0,0,0.6);
-            border-right: 2px solid #3a2e4d;
-        }
-        
-        .cover-inside {
-            box-shadow: inset -10px 0 20px rgba(0,0,0,0.8), -6px 6px 15px rgba(0,0,0,0.6);
-            border-left: 2px solid #3a2e4d;
+            /* Sombra profunda para cuerpo de libro macizo */
+            box-shadow: inset 15px 0 25px rgba(0, 0, 0, 0.8), inset -3px 0 10px rgba(0, 0, 0, 0.4), 8px 8px 15px rgba(0, 0, 0, 0.4);
+            border-right: 3px solid #2a1708;
+            padding-left: 15px;
+            /* Compensa visualmente el grosor del lomo para centrar el texto */
         }
 
-        /* Lomo pintado para dar impresión de libro grueso en la tapa */
+        .cover-inside {
+            box-shadow: inset -15px 0 25px rgba(0, 0, 0, 0.8), -8px 8px 15px rgba(0, 0, 0, 0.4);
+            border-left: 3px solid #2a1708;
+        }
+
+        /* Lomo del libro con sombreado de cuero curvo */
         .cover-art::before {
             content: '';
             position: absolute;
             left: 0;
             top: 0;
             bottom: 0;
-            width: 15px;
-            background: linear-gradient(to right, #050308, #1a1525);
-            border-right: 1px solid rgba(255,255,255,0.05);
+            width: 25px;
+            background: linear-gradient(to right, #1a0e06, #69442a 40%, #1f1107);
+            border-right: 1px solid rgba(0, 0, 0, 0.7);
+            z-index: 5;
         }
 
-        /* TIPOGRAFÍA & CONTENIDO */
-        
-        /* Título Portada */
+        /* Ornamento Dorado del borde tipo libro de Shrek */
+        .gold-frame {
+            position: absolute;
+            inset: 12px 14px 12px 28px;
+            /* Espacio extra en izquierda para librar el lomo */
+            border: 2px solid #dfbd69;
+            border-radius: 2px;
+            pointer-events: none;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.8), inset 0 0 3px rgba(0, 0, 0, 0.8);
+            z-index: 3;
+        }
+
+        .gold-frame-inner {
+            position: absolute;
+            inset: 18px 20px 18px 34px;
+            border: 1px solid rgba(223, 189, 105, 0.6);
+            pointer-events: none;
+        }
+
+        /* Esquinas de oro decorativas */
+        .corner {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background: #5c3a21;
+            /* Parche de tapado, o transparente si se cruza bonito */
+            background-image: radial-gradient(circle at center, #7b4f2c 0%, #4a2d18 100%);
+            border: 2px solid #dfbd69;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            color: #dfbd69;
+            z-index: 4;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5), 2px 2px 5px rgba(0, 0, 0, 0.5);
+            border-radius: 2px;
+        }
+
+        .corner.tl {
+            top: -2px;
+            left: -2px;
+        }
+
+        .corner.tr {
+            top: -2px;
+            right: -2px;
+        }
+
+        .corner.bl {
+            bottom: -2px;
+            left: -2px;
+        }
+
+        .corner.br {
+            bottom: -2px;
+            right: -2px;
+        }
+
+        /* Título de la Portada en Oro Antiguo Majestuoso */
         .cover-art h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 2.8rem;
-            font-style: italic;
-            font-weight: 600;
-            line-height: 1.1;
-            margin-bottom: 20px;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.8);
+            font-size: 2.3rem;
+            /* Tamaño reducido para caber bien en el marco */
+            color: #dfbd69;
+            text-transform: uppercase;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 5px;
+
+            /* Efecto de Oro en Relieve usando sombras (Cincelado/Embossing) */
+            text-shadow:
+                1px 1px 0px #634311,
+                -1px -1px 0px #fff1b8,
+                3px 3px 6px rgba(0, 0, 0, 0.9);
             position: relative;
-            z-index: 2;
+            z-index: 4;
+            letter-spacing: 2px;
+            padding: 0 5px;
         }
 
         .cover-art .subtitle {
-            font-size: 1rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            opacity: 0.9;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            color: #e5c87e;
+            font-style: italic;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+            z-index: 4;
+            margin-top: 15px;
         }
 
         .ornament {
-            width: 80px;
-            height: 2px;
-            background: linear-gradient(to right, transparent, #f9c95e, transparent);
-            margin: 20px auto;
-            position: relative;
+            font-size: 2.5rem;
+            color: #dfbd69;
+            margin: 10px 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            z-index: 4;
         }
 
-        /* Textos Interiores */
+        /* Textos Interiores del Libro */
         .content {
             padding: 50px 35px;
             height: 100%;
@@ -170,6 +243,7 @@
             flex-direction: column;
             text-align: center;
         }
+
         .center-content {
             justify-content: center;
             align-items: center;
@@ -178,23 +252,27 @@
         h3 {
             font-family: 'Lato', sans-serif;
             font-size: 0.85rem;
-            color: #a47449;
+            color: #8b5a2b;
+            /* Marrón roble / Tinta desgastada */
             text-transform: uppercase;
             letter-spacing: 3px;
             margin-bottom: 15px;
+            font-weight: 700;
         }
 
         h2 {
             font-family: 'Playfair Display', serif;
             font-size: 2.2rem;
-            color: #2b201a;
+            color: #3e2723;
+            /* Tinta sepia oscura */
+            font-weight: 700;
             margin-top: 0;
             margin-bottom: 20px;
             line-height: 1.2;
         }
 
         p.text {
-            color: #4a3b32;
+            color: #4e342e;
             font-size: 1.05rem;
             line-height: 1.6;
         }
@@ -202,9 +280,9 @@
         p.quote {
             font-family: 'Playfair Display', serif;
             font-style: italic;
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             line-height: 1.5;
-            color: #a47449;
+            color: #5d4037;
         }
 
         /* BOTONES DEL LIBRO */
@@ -212,131 +290,269 @@
             display: inline-block;
             margin-top: 35px;
             padding: 14px 28px;
-            border: 1px solid #a47449;
-            color: #a47449;
+            border: 1px solid #8b5a2b;
+            color: #8b5a2b;
             text-decoration: none;
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            border-radius: 4px;
+            border-radius: 2px;
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
             z-index: 10;
+            font-weight: 700;
         }
 
         .btn:hover {
-            background: #a47449;
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(164,116,73,0.3);
+            background: #8b5a2b;
+            color: #f4ebd8;
+            box-shadow: 0 4px 10px rgba(139, 90, 43, 0.4);
         }
 
-        /* HINTS: Textos de ayuda que invitan a voltear página */
+        /* HINTS */
         .turn-hint {
             position: absolute;
-            bottom: 25px;
+            bottom: 20px;
             font-size: 0.8rem;
             font-style: italic;
-            color: rgba(74, 59, 50, 0.5);
-            pointer-events: none; /* Que el texto no interfiera con el click */
+            color: rgba(139, 90, 43, 0.6);
+            pointer-events: none;
             animation: softPulse 3s infinite alternate;
         }
-        .turn-hint.right { right: 25px; }
-        .turn-hint.left { left: 25px; }
 
-        .cover-art .turn-hint, .cover-inside .turn-hint {
-            color: rgba(249,201,94,0.6);
+        .turn-hint.right {
+            right: 20px;
         }
 
-        @keyframes softPulse {
-            0% { opacity: 0.4; }
-            100% { opacity: 1; }
+        .turn-hint.left {
+            left: 20px;
         }
 
-        /* Números de página inferiores */
-        .page-number {
-            position: absolute;
-            bottom: 25px;
+        .cover-art .turn-hint,
+        .cover-inside .turn-hint {
+            color: #dfbd69;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            z-index: 5;
+        }
+
+        /* TOC ESTILOS EN LA CONTRATAPA DE CUERO */
+        .toc-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: left;
+        }
+
+        .toc-list li {
+            padding: 10px 15px;
+            border-bottom: 1px dotted rgba(223, 189, 105, 0.4);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: #d4af37;
+            /* Oro antiguo en cuero oscuro */
+            transition: all 0.3s;
+        }
+
+        .toc-list li:hover {
+            color: #fff1b8;
+            transform: translateX(5px);
+            background: linear-gradient(90deg, rgba(223, 189, 105, 0.1), transparent);
+        }
+
+        .toc-list .locked {
+            opacity: 0.4;
+            cursor: not-allowed;
+            color: #a38c5b;
+        }
+
+        .toc-list .locked:hover {
+            color: #a38c5b;
+            transform: none;
+            background: none;
+        }
+
+        .toc-list .chap-num {
+            position: relative;
+            /* Quita el absolute del libro para insertarse inline */
+            bottom: auto;
+            margin-right: 15px;
+            font-size: 1.1rem;
+            color: #d4af37;
+        }
+
+        .toc-list .chap-title {
             font-family: 'Playfair Display', serif;
-            color: #a47449;
+            font-size: 1.25rem;
+            letter-spacing: 1px;
+        }
+
+        .chap-title small {
+            font-size: 0.8rem;
+            color: rgba(223, 189, 105, 0.6);
+            font-style: italic;
+            margin-left: 8px;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .lock-icon {
+            font-size: 0.9rem;
+            margin-left: 10px;
+            opacity: 0.6;
+        }
+
+        .chap-num {
+            position: absolute;
+            bottom: 20px;
+            font-family: 'Playfair Display', serif;
+            color: #8b5a2b;
             font-size: 0.9rem;
         }
-        .page-number.right { right: 50%; transform: translateX(50%); }
-        .page-number.left { left: 50%; transform: translateX(-50%); }
 
-        /* Ajuste para móviles */
+        .page-number.right {
+            right: 50%;
+            transform: translateX(50%);
+        }
+
+        .page-number.left {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
         @media (max-width: 700px) {
             .book {
-                width: 280px;
-                height: 420px;
+                width: 300px;
+                height: 440px;
             }
-            .cover-art h1 { font-size: 2.2rem; }
-            h2 { font-size: 1.8rem; }
-            /* Se centra pero limitando a que cuadre en pantalla pequeña */
-            .book.open { transform: translateX(45%); }
-            
-            .content { padding: 40px 25px; }
+
+            .cover-art h1 {
+                font-size: 2.6rem;
+            }
+
+            .cover-art .subtitle {
+                font-size: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .book.open {
+                transform: translateX(45%);
+            }
+
+            .content {
+                padding: 40px 25px;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <div class="book-wrapper">
         <div class="book" id="book">
-            
-            <!-- ====== CAPÍTULO 2 (Página Final / Base) ====== -->
-            <!-- La hoja base en Z=0. No necesita funcionalidad de flip porque finaliza aquí -->
-            <div class="page base-page" id="page2" data-z="0" style="transform: translateZ(0px);">
+
+            <!-- HOJA NUEVA: CAPÍTULO 3 -->
+            <div class="page base-page" id="page3" data-z="-2" style="transform: translateZ(-2px);">
                 <div class="front paper">
-                    <div class="content">
-                        <h3>Capítulo 2</h3>
-                        <h2>Una Nueva<br>Aventura</h2>
-                        <p class="text">Aquí construiremos la siguiente maravilla. Seguimos escribiendo esto...</p>
-                        <!-- Enlace a la página del capítulo 2 (el placeholder) -->
-                        <a href="Capitulo2.html" class="btn" onclick="event.stopPropagation()">Visualizar Capítulo</a>
+                    <div class="content center-content">
+                        <h3>Capítulo 3</h3>
+                        <h2>Oxapampa</h2>
+                        <p class="quote" style="font-size: 1.2rem; margin-top:20px;">(Próximamente...)</p>
                     </div>
-                    <div class="page-number right">3</div>
+                    <div class="page-number right">5</div>
                 </div>
             </div>
 
-            <!-- ====== CAPÍTULO 1 (Página intermedia) ====== -->
-            <!-- Ubicada en Z=2 visualmente por encima del Capítulo 2 -->
+            <div class="page" id="page2" data-z="0" style="transform: translateZ(0px);">
+                <div class="front paper" onclick="flipPage('page2')">
+                    <div class="content">
+                        <h3>Capítulo 2</h3>
+                        <h2>El Nevado</h2>
+                        <p class="text">Donde el hielo inmenso y el cielo profundo son testigos silenciosos de una dulce
+                            promesa.</p>
+                        <a href="Capitulo2.html" class="btn" onclick="event.stopPropagation()">Abrir Nevado</a>
+                    </div>
+                    <div class="turn-hint right">Siguiente ❯</div>
+                    <div class="page-number right">3</div>
+                </div>
+                <!-- Reverso de la página del Nevado -->
+                <div class="back paper" onclick="unflipPage('page2')">
+                    <div class="content center-content">
+                        <p class="quote">"Una promesa en la nieve"</p>
+                    </div>
+                    <div class="turn-hint left">❮ Anterior</div>
+                    <div class="page-number left">4</div>
+                </div>
+            </div>
+
             <div class="page" id="page1" data-z="2" style="transform: translateZ(2px);">
-                <!-- Frontal: La info del Capítulo 1 -->
                 <div class="front paper" onclick="flipPage('page1')">
                     <div class="content">
                         <h3>Capítulo 1</h3>
                         <h2>El Atardecer</h2>
                         <p class="text">Donde el mundo comenzó a sentirse más sencillo y se iluminó de oro.</p>
-                        <!-- Detenemos la propagación (stopPropagation) para que clickear el link NO mande click a la hoja y la voltee -->
                         <a href="Capitulo1.html" class="btn" onclick="event.stopPropagation()">Abrir Atardecer</a>
                     </div>
-                    <div class="turn-hint right">Ir al Capítulo 2 ❯</div>
+                    <div class="turn-hint right">Siguiente ❯</div>
                     <div class="page-number right">1</div>
                 </div>
-                <!-- Reverso: El texto bonito visible al estar leyendo el Capítulo 2 -->
                 <div class="back paper" onclick="unflipPage('page1')">
                     <div class="content center-content">
-                        <p class="quote">"Cada página cuenta un pedacito de nuestra historia."</p>
+                        <p class="quote">"Érase un Atardecer..."</p>
                     </div>
-                    <div class="turn-hint left">❮ Volver al Capítulo 1</div>
+                    <div class="turn-hint left">❮ Anterior</div>
                     <div class="page-number left">2</div>
                 </div>
             </div>
 
-            <!-- ====== PORTADA (El inicio) ====== -->
-            <!-- Ubicada en Z=4 coronando todas las hojas cuando el libro cierra -->
             <div class="page cover" id="cover" data-z="4" style="transform: translateZ(4px);">
-                <!-- Face Principal. Hace click para abrir. -->
                 <div class="front cover-art" onclick="flipPage('cover')">
-                    <h1>Nuestra<br>Historia</h1>
-                    <div class="ornament"></div>
-                    <p class="subtitle">Para Chio 🌅</p>
+
+                    <!-- Decoración exterior dorada del libro -->
+                    <div class="gold-frame">
+                        <!-- Esquinas usando un símbolo heráldico o floral básico -->
+                        <div class="corner tl">☙</div>
+                        <div class="corner tr">❧</div>
+                        <div class="corner bl">❧</div>
+                        <div class="corner br">☙</div>
+                    </div>
+                    <div class="gold-frame-inner"></div>
+
+                    <h1>Una Nueva<br>Historia</h1>
+                    <div class="ornament">~</div>
+                    <p class="subtitle">Para Chio</p>
+
                     <div class="turn-hint right">Abrir ❯</div>
                 </div>
-                <!-- Contracarátula (Reverso de la Portada). Visible a la dercha cuando está abierto. -->
+
                 <div class="back cover-inside" onclick="unflipPage('cover')">
-                    <div class="turn-hint left">❮ Cerrar el libro</div>
+                    <div class="content" onclick="event.stopPropagation()">
+                        <h3 style="color: #dfbd69;">Índice</h3>
+                        <ul class="toc-list">
+                            <li onclick="goToChapter('Capitulo1.html')">
+                                <span class="chap-num">I.</span>
+                                <span class="chap-title">El Atardecer</span>
+                            </li>
+                            <li onclick="goToChapter('Capitulo2.html')">
+                                <span class="chap-num">II.</span>
+                                <span class="chap-title">El Nevado</span>
+                            </li>
+                            <li class="locked">
+                                <span class="chap-num">III.</span>
+                                <span class="chap-title">Oxapampa <small>(Próximamente...)</small></span>
+                                <span class="lock-icon">🔒</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="turn-hint left" onclick="unflipPage('cover')"
+                        style="pointer-events: auto; cursor: pointer; text-decoration: underline;">❮ Cerrar el libro
+                    </div>
                 </div>
             </div>
 
@@ -344,43 +560,34 @@
     </div>
 
     <script>
+        function goToChapter(url) {
+            window.location.href = url;
+        }
         const book = document.getElementById('book');
 
         function flipPage(id) {
             const page = document.getElementById(id);
-            
-            // Si el libro está cerrado y lo abren, activamos modo "Libro Abierto" (Lomo al Centro)
-            if(!book.classList.contains('open')){
+            if (!book.classList.contains('open')) {
                 book.classList.add('open');
             }
-            
-            // Leemos el eje Z original o base desde su 'data-z', sino es 0.
             let z = page.getAttribute('data-z') || "0";
-            
-            // Volteamos la hoja (-180deg) aplicando el mismo eje Z. 
-            // Esto gracias a las proyecciones 3D hace que la hoja pase a estar "por detrás" ópticamente 
-            // de las que siguen gracias a un Z negativo relativo.
             page.style.transform = `rotateY(-180deg) translateZ(${z}px)`;
             page.classList.add('flipped');
         }
 
         function unflipPage(id) {
             const page = document.getElementById(id);
-            
             let z = page.getAttribute('data-z') || "0";
-            // Retornamos al lugar base
             page.style.transform = `rotateY(0deg) translateZ(${z}px)`;
             page.classList.remove('flipped');
-            
-            // Damos retraso (delay) al CSS para evitar colisión, y revisamos si sigue habiendo hojas rotadas.
             setTimeout(() => {
                 const flippedPages = document.querySelectorAll('.flipped');
-                if(flippedPages.length === 0) {
-                    // Si ya cerramos todas las hojas (0 elements), el libro vuelve a modo "Cerrado"
+                if (flippedPages.length === 0) {
                     book.classList.remove('open');
                 }
-            }, 50); 
+            }, 50);
         }
     </script>
 </body>
+
 </html>
