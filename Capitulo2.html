@@ -106,9 +106,10 @@
             fill: none;
             stroke: rgba(255, 255, 255, 0.6);
             stroke-width: 1.5;
-            stroke-dasharray: 1000; /* Lo suficientemente largo como para cubrir todo el path */
+            stroke-dasharray: 1000;
+            /* Lo suficientemente largo como para cubrir todo el path */
             stroke-dashoffset: 1000;
-            filter: drop-shadow(0 0 5px rgba(255,255,255,0.7));
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.7));
             transition: stroke-dashoffset 4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -128,15 +129,36 @@
             animation: starTwinkle 2s infinite alternate;
         }
 
-        .const-star:nth-child(1) { transition-delay: 0.2s; }
-        .const-star:nth-child(2) { transition-delay: 0.6s; }
-        .const-star:nth-child(3) { transition-delay: 1.0s; }
-        .const-star:nth-child(4) { transition-delay: 1.4s; }
-        .const-star:nth-child(5) { transition-delay: 1.8s; }
+        .const-star:nth-child(1) {
+            transition-delay: 0.2s;
+        }
+
+        .const-star:nth-child(2) {
+            transition-delay: 0.6s;
+        }
+
+        .const-star:nth-child(3) {
+            transition-delay: 1.0s;
+        }
+
+        .const-star:nth-child(4) {
+            transition-delay: 1.4s;
+        }
+
+        .const-star:nth-child(5) {
+            transition-delay: 1.8s;
+        }
 
         @keyframes starTwinkle {
-            0% { transform: scale(1); opacity: 0.7; }
-            100% { transform: scale(1.6); opacity: 1; }
+            0% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(1.6);
+                opacity: 1;
+            }
         }
 
         .condor-wrap {
@@ -206,20 +228,193 @@
 
         .condor-hint {
             position: absolute;
-            bottom: -20px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.65rem;
-            white-space: nowrap;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.7rem;
             letter-spacing: 2px;
+            animation: float 2s infinite ease-in-out;
             pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s;
         }
 
-        .condor-wrap:hover .condor-hint {
-            opacity: 1;
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(-50%, 0);
+            }
+
+            50% {
+                transform: translate(-50%, -8px);
+            }
+        }
+
+        /* FOGATA INTERACTIVA */
+        .campfire-wrapper {
+            position: absolute;
+            bottom: 11%;
+            right: 25%;
+            /* Cerca de la rosa, que está en right: 15% */
+            width: 60px;
+            height: 50px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .wood {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 20px;
+        }
+
+        .log {
+            position: absolute;
+            width: 45px;
+            height: 10px;
+            background: #4a2e15;
+            border-radius: 5px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.8);
+            border: 1px solid #2a1505;
+        }
+
+        .log1 {
+            transform: rotate(20deg);
+            bottom: 5px;
+            left: 8px;
+            z-index: 2;
+        }
+
+        .log2 {
+            transform: rotate(-25deg);
+            bottom: 5px;
+            right: 5px;
+            z-index: 1;
+        }
+
+        .log3 {
+            width: 55px;
+            bottom: 0;
+            left: 2px;
+            z-index: 3;
+        }
+
+        .fire {
+            position: absolute;
+            bottom: 12px;
+            left: 10px;
+            width: 40px;
+            height: 40px;
+            display: none;
+            /* Apagado por defecto */
+        }
+
+        .campfire-wrapper.lit .fire {
+            display: block;
+        }
+
+        .campfire-wrapper.lit .camp-hint {
+            display: none;
+            /* Ocultar texto al encender */
+        }
+
+        .flame {
+            position: absolute;
+            bottom: 0;
+            background: #ff9800;
+            border-radius: 50% 0 50% 50%;
+            transform: rotate(-45deg);
+            box-shadow: 0 0 15px #ff5722;
+        }
+
+        .flame1 {
+            width: 22px;
+            height: 22px;
+            left: 10px;
+            background: #ffeb3b;
+            animation: flicker 0.6s infinite alternate;
+            z-index: 3;
+        }
+
+        .flame2 {
+            width: 28px;
+            height: 28px;
+            left: 0px;
+            animation: flicker 0.5s infinite alternate-reverse;
+            z-index: 2;
+        }
+
+        .flame3 {
+            width: 24px;
+            height: 24px;
+            right: 0px;
+            background: #ff5722;
+            animation: flicker 0.7s infinite alternate;
+            z-index: 1;
+        }
+
+        @keyframes flicker {
+            0% {
+                transform: scale(1) rotate(-45deg);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1.15) rotate(-40deg);
+                opacity: 1;
+            }
+        }
+
+        .camp-hint {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            animation: float 2s infinite ease-in-out;
+            pointer-events: none;
+            width: 100px;
+            text-align: center;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+        }
+
+        /* HUELLAS EN LA NIEVE */
+        .footprint {
+            position: absolute;
+            width: 24px;
+            height: 30px;
+            pointer-events: none;
+            z-index: 5;
+            /* Debajo de los elementos por encima del cielo */
+            opacity: 0.6;
+            transition: opacity 1.5s ease;
+            display: flex;
+            justify-content: space-between;
+            transform: translate(-50%, -50%);
+            /* Centrado */
+        }
+
+        .footprint::before,
+        .footprint::after {
+            content: '';
+            width: 9px;
+            height: 18px;
+            background: rgba(181, 203, 228, 0.4);
+            border-radius: 40% 40% 20% 20%;
+            box-shadow: inset 1px 3px 5px rgba(0, 0, 0, 0.15);
+        }
+
+        .footprint::before {
+            margin-top: 10px;
+            /* pie izquierdo bajado simula paso */
+            transform: rotate(-8deg);
+        }
+
+        .footprint::after {
+            transform: rotate(8deg);
         }
 
         /* LA ROSA MÁGICA EN LA NIEVE */
@@ -592,11 +787,13 @@
         <div class="sky parallax-layer" data-speed="0.05"></div>
 
         <!-- CONSTELACIÓN CORAZÓN (Aparece y dibuja su línea en el cielo) -->
-        <div class="parallax-layer" data-speed="0.06" style="position: absolute; inset: 0; z-index: 9; pointer-events: none;">
+        <div class="parallax-layer" data-speed="0.06"
+            style="position: absolute; inset: 0; z-index: 9; pointer-events: none;">
             <div style="position: absolute; top: 5%; left: 50%; transform: translateX(-50%);">
-                <svg id="heart-constellation" viewBox="0 0 200 200" style="width: 250px; height: 250px; overflow: visible;">
+                <svg id="heart-constellation" viewBox="0 0 200 200"
+                    style="width: 250px; height: 250px; overflow: visible;">
                     <!-- Linea oculta estelar -->
-                    <path class="const-line" d="M100,50 L60,25 L15,65 L50,140 L100,190 L150,140 L185,65 L140,25 Z"/>
+                    <path class="const-line" d="M100,50 L60,25 L15,65 L50,140 L100,190 L150,140 L185,65 L140,25 Z" />
                     <!-- Estrellas (Nodos) -->
                     <circle cx="100" cy="50" r="3" class="const-star" />
                     <circle cx="60" cy="25" r="4" class="const-star" />
@@ -634,11 +831,28 @@
         <div class="magic-flake flake-2" onclick="atraparCopo(this)">❄</div>
         <div class="magic-flake flake-3" onclick="atraparCopo(this)">❄</div>
 
-        <!-- LA ROSA ESCONDIDA (Atada por Parallax a la cordillera) -->
-        <div class="parallax-layer" data-speed="0.25" style="position: absolute; inset: 0; z-index: 12; pointer-events: none;">
+        <!-- ELEMENTOS DECORATIVOS FIJOS EN LA PANTALLA -->
+        <div class="static-elements" style="position: absolute; inset: 0; z-index: 12; pointer-events: none;">
+            <!-- LA ROSA ESCONDIDA -->
             <div class="magic-rose" onclick="atraparRosa()" style="pointer-events: auto;">
                 <div class="rose-icon">🌹</div>
                 <div class="condor-hint">PARA TI</div>
+            </div>
+
+            <!-- FOGATA -->
+            <div class="campfire-wrapper" onclick="encenderFogata(this)" style="pointer-events: auto;">
+                <div class="wood">
+                    <div class="log log1"></div>
+                    <div class="log log2"></div>
+                    <div class="log log3"></div>
+                </div>
+                <!-- Fuego escondido -->
+                <div class="fire">
+                    <div class="flame flame1"></div>
+                    <div class="flame flame2"></div>
+                    <div class="flame flame3"></div>
+                </div>
+                <div class="camp-hint">ENCENDER</div>
             </div>
         </div>
 
@@ -735,14 +949,14 @@
             condor: {
                 titulo: "Para ti...",
                 texto: `
-                    <p>Hace 1 semana me preguntaste qué es lo que siento… y la verdad es algo tan bonito que cuesta ponerlo en palabras. Pero principalmente, lo que siento contigo es paz, tranquilidad… y unas ganas inmensas de quererte, de hacerte feliz. Como alguna vez te dije, cuidarte y quererte se ha vuelto la responsabilidad más bonita que elegí.</p>
-                    <p>Agradezco el día que aceptaste salir conmigo, cuando aceptaste que te agarre la mano, cada muestra de cariño, la química que tenemos, que seas tú misma cuando estamos juntos… agradezco tu salto de fe del que siempre hablo. Agradezco cómo me haces feliz y, sobre todo, le agradezco a Dios por habernos juntado nuevamente, siendo hoy nuestras mejores versiones y con ganas de seguir creciendo, juntos, como un equipo.</p>
-                    <p>Sé que tienes temores, y no los ignoro… pero como te dije, vamos a trabajar en ellos, hasta que dejen de pesar. Porque una mujer tan linda, con un corazón tan puro como el tuyo, merece lo mejor.</p>
-                    <p>También hablamos mucho del tiempo… del bendito tiempo jaja. Y sí, es importante, porque nos estamos volviendo a conocer. Y sí, siempre vamos a seguir conociéndonos… pero me encantaría hacerlo desde otra forma, desde otro lugar.</p>
+                    <p>Hace 1 semana me preguntaste qué es lo que siento, y la verdad es algo tan bonito que cuesta ponerlo en palabras. Pero principalmente, lo que siento contigo es paz, tranquilidad, y unas ganas inmensas de quererte, de hacerte feliz. Como alguna vez te dije, cuidarte y quererte se ha vuelto la responsabilidad más bonita que elegí.</p>
+                    <p>Agradezco el día que aceptaste salir conmigo, cuando aceptaste que te agarre la mano, cada muestra de cariño, la química que tenemos, que seas tú misma cuando estamos juntos, agradezco tu salto de fe del que siempre hablo. Agradezco cómo me haces feliz y, sobre todo, le agradezco a Dios por habernos juntado nuevamente, siendo hoy nuestras mejores versiones y con ganas de seguir creciendo, juntos, como un equipo.</p>
+                    <p>Sé que tienes temores, y no los ignoro, pero como te dije, vamos a trabajar en ellos, hasta que dejen de pesar. Porque una mujer tan linda, con un corazón tan puro como el tuyo, merece lo mejor.</p>
+                    <p>También hablamos mucho del tiempo, del bendito tiempo jaja. Y sí, es importante, porque nos estamos volviendo a conocer. Y sí, siempre vamos a seguir conociéndonos, pero me encantaría hacerlo desde otra forma, desde otro lugar.</p>
                     <p>Chio… este mes ha sido intenso, como nosotros. Me gustan los planes que hacemos, los que vienen, y esa sensación de que juntos podemos comernos el mundo. Me gusta que estemos en sintonía, que seamos felices así, siendo nosotros.</p>
                     <p>Porque desde que llegaste, algo en mí cambió: te metiste en mi ser, encendiste la luz, me llenaste de fe… y sin darme cuenta empezaste a sacar de mí mi mejor versión, tanto que ya no me da miedo decirle al mundo entero que te quiero.</p>
                     <p>Me pasa que me quedo pensando en ti… en tu manera de mirarme, en cómo haces todo tan tierno al amarme, en tus ojos marrones brillando como si hasta la luna quisiera mirarte también. Y ahí es cuando entiendo que no pido nada más que estar entre tus brazos y huir de todo lo demás.</p>
-                    <p>Y si algún día nos falla la memoria y solo nos quedan las fotografías, ojalá se me olvide todo… menos lo que siento por ti. Porque sé que lo nuestro no es cualquiera, lo nuestro es de esos que pueden más que el amor y son más fuertes que el olimpo.</p>
+                    <p>Y si algún día nos falla la memoria y solo nos quedan las fotografías, ojalá se me olvide todo, menos lo que siento por ti. Porque sé que lo nuestro no es cualquiera, lo nuestro es de esos que pueden más que el amor y son más fuertes que el olimpo.</p>
                     <p>Y cuando hablamos de a dónde ir… entre tantas opciones, yo ya me veo contigo, de la mano, yendo a Cali y bailando salsa toda la noche. Y no es solo un plan… es la forma en la que quiero imaginar mi vida contigo.</p>
                     <p>Y sí… tal vez muchas de estas palabras nacieron de canciones que te envié. Pero lo que siento por ti… eso sí es completamente mío.</p>
                     <p>Por eso hoy quiero dejar de insinuarlo y decírtelo claro:</p>
@@ -762,6 +976,42 @@
                 `
             }
         };
+
+        // FOGATA
+        function encenderFogata(elemento) {
+            if (!elemento.classList.contains('lit')) {
+                elemento.classList.add('lit');
+            }
+        }
+
+        // HUELLAS AL HACER CLIC
+        document.addEventListener('click', function (e) {
+            // No dibujar huellas si está apretando interactivos o botones
+            const interactivo = e.target.closest('div[onclick], .message-overlay, .btn-back, a');
+            if (interactivo) return;
+
+            // Solo dibujar huellas en las montañas (para evitar el cielo)
+            const mountain = e.target.closest('.mountain-layer');
+            if (!mountain) return;
+
+            const rect = mountain.getBoundingClientRect();
+            const huella = document.createElement('div');
+            huella.className = 'footprint';
+
+            // Coordenada relativa a la montaña (compensa el parallax y las deja fijas)
+            huella.style.left = (e.clientX - rect.left) + 'px';
+            huella.style.top = (e.clientY - rect.top) + 'px';
+
+            mountain.appendChild(huella);
+
+            // Desvanecer a los 3.5s y remover a los 5s
+            setTimeout(() => {
+                huella.style.opacity = '0';
+                setTimeout(() => {
+                    huella.remove();
+                }, 1500);
+            }, 3500);
+        });
 
         function atraparRosa() {
             mostrarMensaje(mensajesSecretos.rosa);
@@ -783,7 +1033,7 @@
             if (coposAtrapados === totalCopos) {
                 // Aparece la constelación mágicamente al mismo tiempo 
                 document.getElementById('heart-constellation').classList.add('visible');
-                
+
                 // Pequeño delay dramático antes de abrir la carta para dar tiempo a ver el destello inicial
                 setTimeout(() => {
                     mostrarMensaje(mensajesSecretos.nieve);
@@ -804,29 +1054,9 @@
         }
 
 
-        // --- EFECTO PARALLAX 3D ---
-        const layers = document.querySelectorAll('.parallax-layer');
-        let currentX = 0, currentY = 0;
-        let targetX = 0, targetY = 0;
-
-        window.addEventListener('mousemove', (e) => {
-            targetX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
-            targetY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
-        });
-
-        function animateParallax() {
-            currentX += (targetX - currentX) * 0.05;
-            currentY += (targetY - currentY) * 0.05;
-
-            layers.forEach(layer => {
-                const speed = parseFloat(layer.getAttribute('data-speed'));
-                const xOffset = currentX * speed * 150;
-                const yOffset = currentY * speed * 80;
-                layer.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
-            });
-            requestAnimationFrame(animateParallax);
-        }
-        animateParallax();
+        // --- EFECTO PARALLAX 3D DESACTIVADO (A PEDIDO) ---
+        // Se mantiene la estructura de capas para que el css no se rompa,
+        // pero la cámara se queda completamente quieta para evitar que los elementos floten.
 
 
         // --- SISTEMA DE PARTÍCULAS: NIEVE BÁSICA ---
