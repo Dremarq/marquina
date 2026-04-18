@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chio 🌅</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Lato:wght@300;400&display=swap"
+        rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body {
+            background: #0a0618;
+        }
+
+        #root {
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Lato', sans-serif;
+        }
+
+        /* SKY */
+        #sky {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background: linear-gradient(to bottom,
+                    #0b0f19 0%, #1a1e35 20%, #3a2e4d 40%, #703a5c 60%,
+                    #b25854 75%, #df814c 85%, #f6ae5c 94%, #ffdf91 100%);
+        }
+
+        /* CLOUDS */
+        #clouds {
+            position: fixed;
+            z-index: 2;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .cloud {
+            position: absolute;
+            border-radius: 50px;
+            filter: blur(7px);
+            animation: cloudMove linear infinite;
+        }
+
+        @keyframes cloudMove {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(130vw);
+            }
+        }
+
+        /* GOD RAYS — clipped strictly to upper sky */
+        #rays-clip {
+            position: fixed;
+            z-index: 3;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 50%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .ray {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform-origin: bottom center;
+            animation: rayPulse ease-in-out infinite;
+        }
+
+        @keyframes rayPulse {
+
+            0%,
+            100% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* SUN */
+        #sun-wrap {
+            position: fixed;
+            z-index: 6;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+        }
+
+        #sun {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 50% 50%, #ffffff 0%, #ffe9a6 40%, #ffad5c 80%, #f06a28 100%);
+            box-shadow: 0 0 35px 8px rgba(255, 200, 100, .55), 0 0 80px 25px rgba(255, 120, 50, .4), 0 0 160px 50px rgba(230, 80, 20, .2);
+            transition: transform .4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow .4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #sun-wrap:hover #sun {
+            transform: scale(1.05);
+            box-shadow: 0 0 45px 12px rgba(255, 210, 120, .65), 0 0 100px 35px rgba(255, 130, 60, .5), 0 0 200px 70px rgba(230, 90, 25, .3);
+        }
+
+        #hint {
+            margin-top: 12px;
+            text-align: center;
+            font-size: .78rem;
+            letter-spacing: .12em;
+            color: rgba(255, 255, 255, .5);
+            animation: hintPulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes hintPulse {
+
+            0%,
+            100% {
+                opacity: .3;
+            }
+
+            50% {
+                opacity: .85;
+            }
+        }
+
+        /* HORIZON GLOW */
+        #hglow {
+            position: fixed;
+            z-index: 4;
+            bottom: 40%;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: linear-gradient(to bottom, transparent 0%, rgba(255, 120, 60, 0.15) 60%, rgba(255, 160, 80, 0.45) 100%);
+            pointer-events: none;
+        }
+
+        /* OCEAN — z:9 covers everything below including rays */
+        #ocean {
+            position: fixed;
+            z-index: 9;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 42%;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #ad5a4e 0%, #543f5f 15%, #1a2a4b 40%, #0b162c 100%);
+        }
+
+        #shimmer {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            width: 240px;
+            height: 140px;
+            background: radial-gradient(ellipse at top, rgba(255, 210, 130, 0.45) 0%, rgba(255, 140, 60, 0.2) 40%, transparent 70%);
+            pointer-events: none;
+        }
+
+        @keyframes rippleMove {
+            0% {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(20px);
+                opacity: 0;
+            }
+        }
+
+
+
+        /* BEACH / PALMS */
+        #beach {
+            position: fixed;
+            z-index: 10;
+            bottom: 40%;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+        }
+
+        #beach svg {
+            display: block;
+            width: 100%;
+            height: 12vh;
+            min-height: 100px;
+            max-height: 160px;
+        }
+
+        /* PARTICLES — strictly above ocean */
+        #particles {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 42%;
+            pointer-events: none;
+            z-index: 8;
+            overflow: hidden;
+        }
+
+        .ptc {
+            position: absolute;
+            border-radius: 50%;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(0) scale(.8);
+            }
+
+            15% {
+                opacity: .65;
+            }
+
+            85% {
+                opacity: .25;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-110px) scale(1.1);
+            }
+        }
+
+        /* LETTER OVERLAY */
+        #letter-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 3rem 1.2rem 2.5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .9s;
+            overflow-y: auto;
+        }
+
+        #letter-overlay.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #letter-overlay::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 2, 15, .62);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: -1;
+        }
+
+        #letter-box {
+            margin-top: auto;
+            background: rgba(8, 4, 22, .72);
+            border: 1px solid rgba(255, 255, 255, .11);
+            border-radius: 20px;
+            max-width: 560px;
+            width: 100%;
+            padding: 2.8rem 3.2rem 2.4rem;
+            color: #f0e6d0;
+        }
+
+        #salutation {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            font-style: italic;
+            color: #f9c95e;
+            margin-bottom: 1.6rem;
+            opacity: 0;
+            transition: opacity .8s .2s, transform .8s .2s;
+            transform: translateY(10px);
+        }
+
+        .para {
+            font-family: 'Lato', sans-serif;
+            font-size: 1rem;
+            line-height: 1.9;
+            color: #ede3cc;
+            margin-bottom: 1.3rem;
+            font-weight: 300;
+            opacity: 0;
+            transition: opacity .8s, transform .8s;
+            transform: translateY(10px);
+        }
+
+        .para strong {
+            font-weight: 400;
+            color: #f9d97a;
+        }
+
+        #closing-wrap {
+            margin-top: 1.8rem;
+            text-align: right;
+            opacity: 0;
+            transition: opacity .8s, transform .8s;
+            transform: translateY(10px);
+        }
+
+        #closing {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-style: italic;
+            color: #f9c95e;
+            display: block;
+            margin-bottom: .3rem;
+        }
+
+        #signature {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #fff;
+            display: block;
+        }
+
+        #final-phrase {
+            margin-top: 1.8rem;
+            font-family: 'Playfair Display', serif;
+            font-size: .88rem;
+            font-style: italic;
+            color: rgba(249, 201, 94, .72);
+            text-align: center;
+            letter-spacing: .04em;
+            line-height: 1.75;
+            opacity: 0;
+            transition: opacity .8s, transform .8s;
+            transform: translateY(10px);
+            max-width: 420px;
+        }
+
+        .shown {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        #signature-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        #spotify-link {
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            transition: transform .3s ease, filter .3s ease;
+        }
+
+        #spotify-link:hover {
+            transform: scale(1.15);
+            filter: brightness(1.2);
+        }
+
+        #spotify-link svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        #back-btn {
+            margin-top: .7rem;
+            margin-bottom: auto;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, .28);
+            font-size: .74rem;
+            font-family: 'Lato', sans-serif;
+            letter-spacing: .08em;
+            cursor: pointer;
+            transition: color .3s;
+            padding: .4rem .8rem;
+            opacity: 0;
+        }
+
+        #back-btn.shown {
+            opacity: 1;
+        }
+
+        #back-btn:hover {
+            color: rgba(255, 255, 255, .65);
+        }
+
+        @keyframes twinkle {
+            from {
+                opacity: .15;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: .9;
+                transform: scale(1.5);
+            }
+        }
+
+        @media(max-width:540px) {
+            #letter-box {
+                padding: 1.8rem 1.4rem;
+            }
+
+            #salutation {
+                font-size: 1.15rem;
+            }
+
+            .para {
+                font-size: .95rem;
+                line-height: 1.7;
+            }
+
+            #signature {
+                font-size: 1.35rem;
+            }
+
+            #sun {
+                width: 110px;
+                height: 110px;
+            }
+
+            #final-phrase {
+                font-size: .85rem;
+                margin-top: 1.4rem;
+            }
+        }
+
+        /* FIN DEL MEDIA QUERY DE MOVILES */
+
+        /* THE SECRET TURTLES */
+        .swimming-turtle-wrap {
+            position: absolute;
+            left: -80px;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        .swimming-turtle {
+            cursor: pointer;
+            pointer-events: auto;
+            animation: bobbing 3s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.15));
+        }
+
+        @keyframes swimAcross {
+            0% {
+                transform: translateX(0vw);
+            }
+
+            100% {
+                transform: translateX(130vw);
+            }
+        }
+
+        @keyframes bobbing {
+            0% {
+                transform: translateY(0px) rotate(-4deg);
+            }
+
+            100% {
+                transform: translateY(8px) rotate(4deg);
+            }
+        }
+
+        /* SECRET MESSAGE */
+        #secret-message {
+            position: fixed;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 4s ease;
+            z-index: 15;
+            pointer-events: none;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+            width: 90%;
+        }
+
+        #secret-message.revealed {
+            opacity: 1;
+            z-index: 60;
+            pointer-events: auto;
+        }
+
+        .secret-spotify-link {
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 12px;
+            width: 38px;
+            height: 38px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .secret-spotify-link:hover {
+            transform: scale(1.15);
+            filter: brightness(1.2);
+        }
+
+        /* SECRET MODE ENVIRONMENT DIMMING */
+        body.secret-mode #sun-wrap,
+        body.secret-mode #ocean,
+        body.secret-mode #beach,
+        body.secret-mode #rays-clip,
+        body.secret-mode #hglow,
+        body.secret-mode #clouds,
+        body.secret-mode #particles,
+        body.secret-mode #letter-overlay,
+        body.secret-mode .swimming-turtle-wrap {
+            opacity: 0.05 !important;
+            transition: opacity 4s ease, transform 4s ease;
+            pointer-events: none;
+        }
+
+        body.secret-mode #sky {
+            opacity: 0.2 !important;
+            transition: opacity 4s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <div id="sky"></div>
+        <div id="clouds"></div>
+        <div id="rays-clip"></div>
+        <div id="hglow"></div>
+
+        <div id="sun-wrap" onclick="openLetter()">
+            <div id="sun"></div>
+            <div id="hint">toca el sol ✦</div>
+        </div>
+
+        <!-- OCEAN cubre todo debajo, incluyendo cualquier rayo que se filtre -->
+        <div id="ocean">
+            <div id="shimmer"></div>
+            <!-- Las tortugas se generan por JS -->
+        </div>
+
+        <div id="beach">
+            <svg width="100%" viewBox="0 0 1200 160" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"
+                style="overflow:visible;">
+                <path d="M0,120 Q200,95 400,108 Q600,120 800,100 Q1000,82 1200,105 L1200,160 L0,160 Z" fill="#080814" />
+            </svg>
+        </div>
+
+        <div id="particles"></div>
+
+        <div id="secret-message">
+            Contando los días para que seas mi enamorada...
+        </div>
+
+        <div id="letter-overlay">
+            <div id="letter-box">
+                <div id="salutation">Princesa,</div>
+                <p class="para" id="p1">
+                    Hay algo contigo que hace que todo lo demás importe un poco menos.
+                    No sé explicarlo bien, pero cuando estamos juntos el mundo se vuelve más ligero.
+                </p>
+                <p class="para" id="p2">
+                    Cuando estoy contigo, siento paz, tranquilidad… todo se vuelve más sencillo.
+                    Y sé que tú también lo sientes.
+                </p>
+                <p class="para" id="p3">
+                    Tenemos algo, princesa. Los dos lo sabemos, y creo que ninguno necesita decirlo para sentirlo.
+                    Aun así, quería escribirlo: cuidarte y quererte no se siente como una obligación,
+                    sino como algo que elegí sin pensarlo demasiado… y me alegra haberlo hecho.
+                </p>
+                <p class="para" id="p4">
+                    No sé cuántos atardeceres llevamos ni cuántos nos faltan por ver,
+                    pero sí sé que quiero seguir descubriéndolos contigo, en distintos lugares,
+                    en distintos momentos, pero siempre a tu lado.
+                </p>
+                <div id="closing-wrap">
+                    <span id="closing">Con mucho cariño,</span>
+                    <div id="signature-row">
+                        <a href="https://open.spotify.com/intl-es/track/7ns16ylM6sbxo9ZWIwyE5d?si=d2dc3ef4714d4e34"
+                            target="_blank" rel="noopener noreferrer" id="spotify-link">
+                            <svg viewBox="0 0 24 24" fill="#1ed760" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.24 1.021zM19.32 14.1c-.3.42-.84.54-1.26.24-3.36-2.04-8.52-2.64-12.54-1.44-.48.12-1.02-.12-1.14-.6-.12-.48.12-1.02.6-1.14 4.56-1.32 10.26-.6 14.1 1.68.42.3.54.84.24 1.26zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.6.18-1.2.72-1.38 4.2-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.54-1.02.72-1.56.42z" />
+                            </svg>
+                        </a>
+                        <span id="signature">— Moor 🌅</span>
+                    </div>
+                </div>
+            </div>
+            <div id="final-phrase">
+                "El atardecer siempre vuelve,<br />y yo siempre elegiré verlo contigo."
+            </div>
+            <button id="back-btn" onclick="closeLetter()">← volver al atardecer</button>
+        </div>
+    </div>
+
+    <script>
+        /* STARS */
+        const skyEl = document.getElementById('sky');
+        for (let i = 0; i < 65; i++) {
+            const s = document.createElement('div');
+            const sz = 0.8 + Math.random() * 2.2;
+            s.style.cssText = `
+      position:absolute;background:white;border-radius:50%;
+      width:${sz}px;height:${sz}px;
+      left:${Math.random() * 100}%;top:${Math.random() * 42}%;
+      z-index:1;pointer-events:none;
+      animation:twinkle ${1.5 + Math.random() * 2.5}s ${Math.random() * 4}s infinite alternate;
+    `;
+            skyEl.appendChild(s);
+        }
+
+        /* GOD RAYS — inside overflow:hidden container, never bleed into ocean */
+        const raysEl = document.getElementById('rays-clip');
+        for (let i = 0; i < 12; i++) {
+            const r = document.createElement('div');
+            const angle = -68 + (i * (136 / 11));
+            const w = 16 + Math.random() * 40;
+            const delay = Math.random() * 5;
+            const dur = 6 + Math.random() * 6;
+            r.style.cssText = `
+      position:absolute;bottom:0;left:50%;
+      width:${w}px;height:120%;
+      transform-origin:bottom center;
+      transform:translateX(-50%) rotate(${angle}deg);
+      background:linear-gradient(to top,rgba(255,200,100,.08),rgba(255,170,80,.02),transparent);
+      animation:rayPulse ${dur}s ${delay}s ease-in-out infinite;
+    `;
+            raysEl.appendChild(r);
+        }
+
+        /* CLOUDS */
+        const cloudsEl = document.getElementById('clouds');
+        const cdefs = [
+            { top: '10%', left: '-20%', w: 260, h: 52, color: 'rgba(150,75,85,.32)', dur: 110, delay: 0 },
+            { top: '22%', left: '12%', w: 175, h: 38, color: 'rgba(170,90,75,.28)', dur: 130, delay: -18 },
+            { top: '6%', left: '52%', w: 215, h: 46, color: 'rgba(120,60,95,.35)', dur: 120, delay: -38 },
+            { top: '30%', left: '68%', w: 145, h: 33, color: 'rgba(145,80,68,.24)', dur: 140, delay: -55 },
+            { top: '16%', left: '36%', w: 115, h: 28, color: 'rgba(180,95,70,.22)', dur: 125, delay: -28 },
+        ];
+        cdefs.forEach(cd => {
+            const c = document.createElement('div');
+            c.className = 'cloud';
+            c.style.cssText = `
+      position:absolute;top:${cd.top};left:${cd.left};
+      width:${cd.w}px;height:${cd.h}px;
+      background:${cd.color};border-radius:${cd.h}px;filter:blur(7px);
+      animation:cloudMove ${cd.dur}s ${cd.delay}s linear infinite;
+    `;
+            cloudsEl.appendChild(c);
+        });
+
+        /* PARTICLES */
+        const pEl = document.getElementById('particles');
+        const pColors = [
+            'rgba(249,201,94,.5)', 'rgba(255,255,255,.3)',
+            'rgba(240,145,58,.4)', 'rgba(255,220,130,.38)'
+        ];
+        function spawnP() {
+            const p = document.createElement('div');
+            p.className = 'ptc';
+            const sz = 3 + Math.random() * 5;
+            p.style.cssText = `
+      width:${sz}px;height:${sz}px;
+      left:${Math.random() * 100}%;
+      bottom:${5 + Math.random() * 30}%;
+      background:${pColors[Math.floor(Math.random() * 4)]};
+      animation-duration:${7 + Math.random() * 9}s;
+      animation-delay:${Math.random() * 2}s;
+    `;
+            pEl.appendChild(p);
+            setTimeout(() => p.remove(), 18000);
+        }
+        for (let i = 0; i < 6; i++) setTimeout(spawnP, i * 500);
+        setInterval(spawnP, 2200);
+
+        /* LETTER */
+        let typeTimeouts = [];
+        let letterOriginalText = {};
+
+        window.addEventListener('DOMContentLoaded', () => {
+            ['p1', 'p2', 'p3', 'p4'].forEach(id => {
+                let el = document.getElementById(id);
+                letterOriginalText[id] = el.innerHTML.trim().replace(/\s+/g, ' ');
+                el.innerHTML = '';
+            });
+        });
+
+        function typeWriter(id, text, startDelay, speed = 35) {
+            let promiseResolve;
+            const p = new Promise(r => promiseResolve = r);
+
+            let toStart = setTimeout(() => {
+                const el = document.getElementById(id);
+                el.classList.add('shown');
+                el.innerHTML = '';
+                let i = 0;
+                function type() {
+                    if (i < text.length) {
+                        el.innerHTML += text.charAt(i);
+                        i++;
+                        let toType = setTimeout(type, speed);
+                        typeTimeouts.push(toType);
+                    } else {
+                        promiseResolve();
+                    }
+                }
+                type();
+            }, startDelay);
+            typeTimeouts.push(toStart);
+            return p;
+        }
+
+        async function openLetter() {
+            document.getElementById('letter-overlay').classList.add('visible');
+
+            ['p1', 'p2', 'p3', 'p4'].forEach(id => {
+                document.getElementById(id).innerHTML = '';
+                document.getElementById(id).classList.remove('shown');
+            });
+            ['salutation', 'closing-wrap', 'final-phrase', 'back-btn'].forEach(id => {
+                document.getElementById(id).classList.remove('shown');
+            });
+            typeTimeouts.forEach(clearTimeout);
+            typeTimeouts = [];
+
+            let t = setTimeout(() => document.getElementById('salutation').classList.add('shown'), 200);
+            typeTimeouts.push(t);
+
+            await typeWriter('p1', letterOriginalText['p1'], 1000);
+            await typeWriter('p2', letterOriginalText['p2'], 300);
+            await typeWriter('p3', letterOriginalText['p3'], 300);
+            await typeWriter('p4', letterOriginalText['p4'], 300);
+
+            let t2 = setTimeout(() => {
+                document.getElementById('closing-wrap').classList.add('shown');
+                let t3 = setTimeout(() => document.getElementById('final-phrase').classList.add('shown'), 800);
+                let t4 = setTimeout(() => document.getElementById('back-btn').classList.add('shown'), 1500);
+                typeTimeouts.push(t3, t4);
+            }, 500);
+            typeTimeouts.push(t2);
+        }
+
+        function closeLetter() {
+            document.getElementById('letter-overlay').classList.remove('visible');
+            typeTimeouts.forEach(clearTimeout);
+            typeTimeouts = [];
+            ['salutation', 'p1', 'p2', 'p3', 'p4', 'closing-wrap', 'final-phrase', 'back-btn']
+                .forEach(id => document.getElementById(id).classList.remove('shown'));
+        }
+
+        /* GENERATE REALISTIC PALMS & BIRDS */
+        const beachSvg = document.querySelector('#beach svg');
+        function addPalmsAndBirds() {
+            const color = '#080814';
+            const palms = [
+                { x: 80, y: 130, s: 2.8, t: -2 },
+                { x: 280, y: 145, s: 3.5, t: 5 },
+                { x: 820, y: 138, s: 3.2, t: -4 },
+                { x: 1080, y: 155, s: 4.2, t: 6 }
+            ];
+
+            const rect = document.getElementById('beach').getBoundingClientRect();
+            let correctionX = 1.0;
+            let scaleOverall = 1.0;
+
+            if (rect.width > 0 && rect.height > 0) {
+                const currentRatio = (rect.height / 160) / (rect.width / 1200);
+                const referenceRatio = 0.585;
+                correctionX = currentRatio / referenceRatio;
+            }
+
+            // Si es un celular, reduzco drásticamente su tamaño y las alejo del centro
+            if (window.innerWidth <= 600) {
+                scaleOverall = 0.40;
+
+                // Despeja el sol desplazando las palmeras internas a los bordes
+                palms[1].x -= 120;
+                palms[2].x += 120;
+            }
+
+            palms.forEach(p => {
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.setAttribute('transform', `translate(${p.x}, ${p.y}) scale(${p.s * correctionX * scaleOverall}, ${p.s * scaleOverall}) rotate(${p.t})`);
+
+                const trunk = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                trunk.setAttribute('d', 'M-4,0 Q-2,-60 0,-115 Q2,-60 4,0 Z');
+                trunk.setAttribute('fill', color);
+                g.appendChild(trunk);
+
+                const numFronds = 40;
+                for (let i = 0; i < numFronds; i++) {
+                    const angle = Math.PI * 2 * (i / numFronds) + (Math.random() * 0.4 - 0.2);
+                    const len = 45 + Math.random() * 45;
+
+                    const tipX = Math.cos(angle) * len;
+                    let tipY = Math.sin(angle) * len + len * 0.45; // gravedad inyectada
+                    const cX = Math.cos(angle) * len * 0.5;
+                    const cY = Math.sin(angle) * len * 0.5 - len * 0.25;
+
+                    const stem = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    stem.setAttribute('d', `M0,-110 Q${cX},${cY - 110} ${tipX},${tipY - 110}`);
+                    stem.setAttribute('stroke', color);
+                    stem.setAttribute('stroke-width', '1.2');
+                    stem.setAttribute('fill', 'none');
+                    g.appendChild(stem);
+
+                    const fg = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    fg.setAttribute('stroke', color);
+                    fg.setAttribute('stroke-width', '0.7');
+                    fg.setAttribute('fill', 'none');
+
+                    const numLeaves = 14 + Math.random() * 8;
+                    for (let j = 1; j < numLeaves; j++) {
+                        const t = j / numLeaves;
+                        const px = 2 * (1 - t) * t * cX + t * t * tipX;
+                        const py = 2 * (1 - t) * t * (cY - 110) + t * t * (tipY - 110);
+
+                        const leafLen = (1 - t) * 16 + 4;
+                        const leafSpread = (Math.cos(angle) > 0 ? 1 : -1) * (Math.random() * leafLen * 0.5);
+
+                        const leaf = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        leaf.setAttribute('d', `M${px},${py} Q${px + leafSpread},${py + leafLen * 0.5} ${px + leafSpread * 0.5},${py + leafLen}`);
+                        fg.appendChild(leaf);
+                    }
+                    g.appendChild(fg);
+                }
+                beachSvg.appendChild(g);
+            });
+
+            /* Parvada de pajaros */
+            for (let i = 0; i < 15; i++) {
+                const bx = 420 + Math.random() * 360;
+                const by = -80 + Math.random() * 160 - Math.abs(bx - 600) * 0.2;
+                const bs = 0.4 + Math.random() * 0.6;
+                const bird = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                bird.setAttribute('d', 'M0,0 Q5,-6 10,-2 Q15,-6 20,0 Q15,-3 10,0 Q5,-3 0,0 Z');
+                bird.setAttribute('fill', color);
+                bird.setAttribute('transform', `translate(${bx}, ${by}) scale(${bs})`);
+                beachSvg.appendChild(bird);
+            }
+        }
+        addPalmsAndBirds();
+
+        /* GENERATE WATER RIPPLES */
+        function addRipples() {
+            const ocean = document.getElementById('ocean');
+            for (let i = 0; i < 45; i++) {
+                const r = document.createElement('div');
+                const t = Math.random();
+                const width = 15 + t * t * 140;
+                const height = 1 + t * 2;
+                const left = Math.random() * 100;
+                const top = t * 100;
+
+                const isSunsetZone = (left > 35 && left < 65 && top < 40);
+                const color = isSunsetZone ? 'rgba(255, 190, 110, 0.45)' : 'rgba(255, 255, 255, 0.12)';
+
+                const delay = Math.random() * 5;
+                const dur = 4 + Math.random() * 6;
+
+                r.style.cssText = `
+                    position: absolute;
+                    left: ${left}%;
+                    top: ${top}%;
+                    width: ${width}px;
+                    height: ${height}px;
+                    background: ${color};
+                    border-radius: 50%;
+                    filter: blur(1px);
+                    animation: rippleMove ${dur}s ${delay}s linear infinite alternate;
+                `;
+                ocean.appendChild(r);
+            }
+        }
+        addRipples();
+
+        /* GENERATE TURTLES */
+        function addTurtles() {
+            const ocean = document.getElementById('ocean');
+            const turtleDefs = [
+                { top: 45, dur: 38, delay: 0, scale: 1 },
+                { top: 35, dur: 45, delay: 12, scale: 0.8 },
+                { top: 55, dur: 33, delay: 5, scale: 1.1 },
+                { top: 40, dur: 50, delay: 25, scale: 0.6 }
+            ];
+
+            turtleDefs.forEach((def, index) => {
+                const wrap = document.createElement('div');
+                wrap.className = 'swimming-turtle-wrap';
+                wrap.style.top = def.top + '%';
+                wrap.style.animation = `swimAcross ${def.dur}s ${def.delay}s linear infinite`;
+
+                const turtle = document.createElement('div');
+                turtle.className = 'swimming-turtle';
+                turtle.style.width = (70 * def.scale) + 'px';
+                turtle.style.height = (35 * def.scale) + 'px';
+                turtle.onclick = (e) => revealSecret(e, index);
+
+                turtle.innerHTML = `
+                    <svg width="100%" height="100%" viewBox="0 0 100 60" fill="#132035">
+                        <!-- Shell -->
+                        <path d="M 15 35 C 15 5, 70 5, 75 35 Z" />
+                        <!-- Head -->
+                        <path d="M 70 30 Q 90 25 95 32 Q 95 38 72 38 Z" />
+                        <!-- Front flipper sweeping down and back -->
+                        <path d="M 55 33 Q 45 60 20 53 Q 40 45 50 33 Z" />
+                        <!-- Back flipper -->
+                        <path d="M 25 33 Q 15 45 5 40 Q 15 35 20 33 Z" />
+                    </svg>
+                `;
+                wrap.appendChild(turtle);
+                ocean.appendChild(wrap);
+            });
+        }
+        addTurtles();
+
+        /* BOTTLES MESSAGE */
+        function addBottles() {
+            const ocean = document.getElementById('ocean');
+            const bottleDefs = [
+                {
+                    bottom: 12, left: 15, dur: 25,
+                    msg: "Nunca olvides lo increíble que eres. Eres la mejor en todo lo que te propones hacer, y yo no podría admirarte más.<br><br>Sigue brillando.",
+                    anim: "bottleDrift0"
+                },
+                {
+                    bottom: 25, left: 50, dur: 35,
+                    msg: "Mi lugar favorito: tú.",
+                    anim: "bottleDrift1"
+                },
+                {
+                    bottom: 5, left: 85, dur: 28,
+                    msg: "Estoy contando los días para que seas mi enamorada.",
+                    anim: "bottleDrift2"
+                }
+            ];
+
+            bottleDefs.forEach((def, index) => {
+                const wrap = document.createElement('div');
+                wrap.className = 'bottle-wrap';
+                wrap.style.cssText = `
+                    position: absolute;
+                    bottom: ${def.bottom}%;
+                    left: ${def.left}%;
+                    width: 35px;
+                    height: 35px;
+                    cursor: pointer;
+                    z-index: 60;
+                    animation: ${def.anim} ${def.dur}s ease-in-out infinite alternate;
+                    filter: drop-shadow(0 0 6px rgba(255,255,255,0.25));
+                `;
+
+                const bottle = document.createElement('div');
+                bottle.style.cssText = "width: 100%; height: 100%; animation: bottleBobbing 3s ease-in-out infinite alternate;";
+                bottle.onclick = (e) => openBottle(e, def.msg);
+
+                bottle.innerHTML = '<svg width="100%" height="100%" viewBox="0 0 100 100">' +
+                    '<rect x="42" y="10" width="16" height="15" fill="#a47449" />' +
+                    '<rect x="40" y="25" width="20" height="20" fill="rgba(150, 200, 220, 0.5)" stroke="rgba(255,255,255,0.7)" stroke-width="2"/>' +
+                    '<path d="M 40 45 C 20 50, 20 90, 40 95 L 60 95 C 80 90, 80 50, 60 45 Z" fill="rgba(150, 200, 220, 0.5)" stroke="rgba(255,255,255,0.7)" stroke-width="2"/>' +
+                    '<rect x="42" y="50" width="16" height="25" fill="#f4e4bc" transform="rotate(-15 50 63)"/>' +
+                    '</svg>';
+                wrap.appendChild(bottle);
+                ocean.appendChild(wrap);
+            });
+
+            const overlay = document.createElement('div');
+            overlay.id = 'bottle-overlay';
+            overlay.innerHTML = '<div id="bottle-paper">' +
+                '<div class="paper-close" onclick="closeBottle()">×</div>' +
+                '<span id="bottle-message-text"></span>' +
+                '</div>';
+            document.body.appendChild(overlay);
+
+            const style = document.createElement('style');
+            style.innerHTML = '#bottle-overlay { position: fixed; inset: 0; z-index: 100; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }' +
+                '#bottle-overlay.visible { opacity: 1; pointer-events: auto; }' +
+                '#bottle-paper { background: #f9f1d8; color: #4a3b32; padding: 2.5rem 2rem 2rem 2rem; border-radius: 5px; box-shadow: 0 0 20px rgba(0,0,0,0.5); max-width: 320px; width: 85%; text-align: center; font-family: "Playfair Display", serif; font-size: 1.15rem; line-height: 1.6; position: relative; border: 1px solid #d4c4a8; }' +
+                '.paper-close { position: absolute; top: 5px; right: 15px; font-size: 1.8rem; color: #8c7861; cursor: pointer; font-family: sans-serif; font-weight: bold; }' +
+                '@keyframes bottleDrift0 { 0% { transform: translateX(0); } 100% { transform: translateX(25vw); } }' +
+                '@keyframes bottleDrift1 { 0% { transform: translateX(0); } 100% { transform: translateX(-25vw); } }' +
+                '@keyframes bottleDrift2 { 0% { transform: translateX(0); } 100% { transform: translateX(-35vw); } }' +
+                '@keyframes bottleBobbing { 0% { transform: translateY(0px) rotate(-12deg); } 100% { transform: translateY(-6px) rotate(8deg); } }';
+            document.head.appendChild(style);
+        }
+        addBottles();
+
+        function openBottle(e, msg) {
+            if (e) e.stopPropagation();
+            document.getElementById('bottle-message-text').innerHTML = msg;
+            document.getElementById('bottle-overlay').classList.add('visible');
+        }
+        function closeBottle() {
+            document.getElementById('bottle-overlay').classList.remove('visible');
+        }
+
+        /* RED DE CAPTURA DEL SECRETO */
+        function revealSecret(e, index = 0) {
+            if (e) e.stopPropagation();
+            closeLetter();
+            document.body.classList.add('secret-mode');
+
+            const messages = [
+                { text: "Te regalo mi tiempo y sé que de todas no hay mejor inversión ♫", link: "https://open.spotify.com/intl-es/track/2318Aoqig6HS9YkHGlAm8T?si=0fab63c1cd80457a" },
+                { text: "Solo me alienta el deseo divino de hacerte mía ♫", link: "https://open.spotify.com/intl-es/track/6VQ2fI8goSX8mpSvytXkXR?si=59ebe5ae2ce347b7" },
+                { text: "Tú eres lo que hace falta pa una vida feliz ♫", link: "https://open.spotify.com/intl-es/track/7ns16ylM6sbxo9ZWIwyE5d?si=382a68a977be47cc" },
+                { text: "Es que me tiene loco su manera de mirarme<br>Cómo ella le hace pa llegarme<br>Cómo lo hace tierno al amarme<br>Sus ojos marrones con la luna brillar ♫", link: "https://open.spotify.com/intl-es/track/5MKbWaXeSQSmzmo7gPQha1?si=1ac5af5d76d440f6" }
+            ];
+            
+            // Cada tortuga muestra exactamente un mensaje y link diferente siempre
+            const msgObj = messages[index % messages.length];
+            document.getElementById('secret-message').innerHTML = msgObj.text +
+                ' <a href="' + msgObj.link + '" target="_blank" rel="noopener noreferrer" class="secret-spotify-link">' +
+                '<svg viewBox="0 0 24 24" fill="#1ed760" xmlns="http://www.w3.org/2000/svg">' +
+                '<path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.24 1.021zM19.32 14.1c-.3.42-.84.54-1.26.24-3.36-2.04-8.52-2.64-12.54-1.44-.48.12-1.02-.12-1.14-.6-.12-.48.12-1.02.6-1.14 4.56-1.32 10.26-.6 14.1 1.68.42.3.54.84.24 1.26zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.6.18-1.2.72-1.38 4.2-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.54-1.02.72-1.56.42z" />' +
+                '</svg></a>';
+
+            setTimeout(() => {
+                document.getElementById('secret-message').classList.add('revealed');
+
+                // Configurar click para salir del modo secreto
+                setTimeout(() => {
+                    document.body.addEventListener('click', hideSecret, { once: true });
+                    document.body.addEventListener('touchstart', hideSecret, { once: true });
+                }, 500);
+            }, 1000);
+        }
+
+        function hideSecret(e) {
+            document.body.classList.remove('secret-mode');
+            document.getElementById('secret-message').classList.remove('revealed');
+        }
+
+    </script>
+</body>
+
+</html>
