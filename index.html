@@ -205,6 +205,105 @@
             }
         }
 
+        /* --- ESTADO APAGADO (LIGHTS OFF) --- */
+        body.lights-off .ambient-darkness {
+            background: radial-gradient(circle at center, transparent 10%, rgba(5, 2, 1, 0.98) 50%, #000000 100%);
+            opacity: 1 !important;
+        }
+
+        body.lights-off .flame {
+            opacity: 0;
+            transform: translateX(-50%) scale(0);
+        }
+
+        body.lights-off .candle {
+            filter: brightness(0.2);
+            box-shadow: inset 0 -10px 20px rgba(0, 0, 0, 0.8), 5px 5px 10px rgba(0, 0, 0, 0.9);
+        }
+
+        body.lights-off .book-wrapper {
+            filter: brightness(0.2);
+        }
+
+        body.lights-off .rose-decoration,
+        body.lights-off .envelope-container {
+            opacity: 0;
+            transform: translateY(20px) rotate(-15deg);
+            pointer-events: none;
+        }
+
+        body.lights-off .spotify-container {
+            filter: brightness(0.4);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* TRANSICIONES DE ENCENDIDO */
+        .ambient-darkness,
+        .flame,
+        .candle,
+        .book-wrapper,
+        .rose-decoration,
+        .spotify-container {
+            transition: all 2.5s ease-in-out;
+        }
+
+        /* --- CAJA DE CERILLOS --- */
+        .matchbox {
+            position: absolute;
+            bottom: 6%;
+            left: 50%;
+            transform: translateX(-50%) rotate(3deg);
+            width: 50px;
+            height: 35px;
+            background: linear-gradient(135deg, #7b2c2c, #4a1515);
+            border-radius: 3px;
+            box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.9), inset 0 0 5px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease, transform 0.3s ease;
+            animation: pulse-glow 2s infinite;
+        }
+
+        .matchbox::after {
+            content: '🔥';
+            font-size: 1.2rem;
+            filter: drop-shadow(0 0 5px rgba(255, 100, 0, 0.8));
+        }
+
+        .matchbox:hover {
+            transform: translateX(-50%) rotate(5deg) scale(1.1);
+        }
+
+        .matchbox-label {
+            position: absolute;
+            top: -25px;
+            width: 150px;
+            text-align: center;
+            color: #d4af37;
+            font-size: 0.8rem;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            opacity: 0.8;
+            pointer-events: none;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.9), 0 0 10px rgba(255, 100, 0, 0.2);
+            }
+
+            50% {
+                box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 150, 0, 0.6);
+            }
+        }
+
         /* Sombras del libro sobre la mesa */
         .book-shadow-closed {
             position: absolute;
@@ -919,7 +1018,7 @@
             cursor: pointer;
             z-index: 3;
             transform: rotate(-12deg);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 2.5s ease-in-out, filter 2.5s ease-in-out;
         }
 
         .envelope-container:hover {
@@ -1061,7 +1160,7 @@
     </style>
 </head>
 
-<body>
+<body class="lights-off">
 
     <!-- Ambiente oscuro superpuesto -->
     <div class="ambient-darkness"></div>
@@ -1115,6 +1214,11 @@
         <!-- Sobre de carta en la mesa -->
         <div class="envelope-container" onclick="openLetter()">
             <div class="wax-seal"></div>
+        </div>
+
+        <!-- Caja de cerillos para encender -->
+        <div class="matchbox" id="matchboxContainer" onclick="lightUpRoom()">
+            <div class="matchbox-label">Encender Velas</div>
         </div>
     </div>
 
@@ -1230,7 +1334,15 @@
     <!-- Modal de la carta -->
     <div class="letter-modal" id="letterModal">
         <div class="letter-content">
-            <p id="letterMessage">Mi amor,<br><br>Ya estamos por cumplir un mes juntos, y sinceramente no puedo evitar sentirme feliz por todo lo que estamos viviendo y por todo lo bonito que aún nos falta por vivir. Desde que llegaste a mi vida, mis días se han vuelto más especiales, más tranquilos y mucho más felices.<br><br>Tal vez sea solo un mes, pero para mí significa el inicio de algo muy bonito. Cada momento contigo, cada conversación, cada risa y cada detalle han hecho que este tiempo valga muchísimo.<br><br>Por eso quiero invitarte a celebrar nuestro primer mes juntos, porque quiero seguir creando recuerdos contigo y disfrutar cada etapa de esta historia que estamos construyendo.<br><br>Gracias por hacerme sentir tan bien a tu lado. Este será el primero de muchos meses más, te lo prometo.<br><br>Con mucho cariño,<br>Moor.</p>
+            <p id="letterMessage">Mi amor,<br><br>Ya estamos por cumplir un mes juntos, y sinceramente no puedo evitar
+                sentirme feliz por todo lo que estamos viviendo y por todo lo bonito que aún nos falta por vivir. Desde
+                que llegaste a mi vida, mis días se han vuelto más especiales, más tranquilos y mucho más
+                felices.<br><br>Tal vez sea solo un mes, pero para mí significa el inicio de algo muy bonito. Cada
+                momento contigo, cada conversación, cada risa y cada detalle han hecho que este tiempo valga
+                muchísimo.<br><br>Por eso quiero invitarte a celebrar nuestro primer mes juntos, porque quiero seguir
+                creando recuerdos contigo y disfrutar cada etapa de esta historia que estamos
+                construyendo.<br><br>Gracias por hacerme sentir tan bien a tu lado. Este será el primero de muchos meses
+                más, te lo prometo.<br><br>Con mucho cariño,<br>Moor.</p>
             <button class="close-letter-btn" onclick="closeLetter()" style="margin-top: 20px;">Cerrar Carta</button>
         </div>
     </div>
@@ -1239,6 +1351,17 @@
         // Funciones de la carta
         function openLetter() {
             document.getElementById('letterModal').classList.add('active');
+        }
+
+        // Encender la magia
+        function lightUpRoom() {
+            document.body.classList.remove('lights-off');
+            const matchbox = document.getElementById('matchboxContainer');
+            if (matchbox) {
+                matchbox.style.opacity = '0';
+                matchbox.style.pointerEvents = 'none';
+                setTimeout(() => matchbox.remove(), 1000);
+            }
         }
 
         function closeLetter() {
