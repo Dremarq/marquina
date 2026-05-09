@@ -31,9 +31,12 @@
         /* --- NUEVO: ENTORNO DE MESA Y VELAS --- */
         .ambient-darkness {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
-            background: radial-gradient(circle at center, transparent 30%, rgba(5,2,1,0.7) 80%, #000000 100%);
+            background: radial-gradient(circle at center, transparent 30%, rgba(5, 2, 1, 0.7) 80%, #000000 100%);
             z-index: 50;
             mix-blend-mode: multiply;
         }
@@ -44,7 +47,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1; /* Para que pueda recibir clicks */
+            z-index: 1;
+            /* Para que pueda recibir clicks */
             overflow: hidden;
             background: radial-gradient(circle at top, #1a100a 0%, #0a0604 100%);
         }
@@ -57,28 +61,27 @@
             height: 100%;
             background: radial-gradient(ellipse at top, #3e2211 0%, #170b04 60%, #050201 100%);
             transform: perspective(1000px) rotateX(60deg);
-            box-shadow: inset 0 50px 100px rgba(0,0,0,0.9);
+            box-shadow: inset 0 50px 100px rgba(0, 0, 0, 0.9);
             border-top: 2px solid #1a0b04;
         }
 
         .desk-surface::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: repeating-linear-gradient(
-                90deg, 
-                transparent 0px, 
-                transparent 40px, 
-                rgba(0,0,0,0.2) 40px, 
-                rgba(0,0,0,0.2) 42px
-            ),
-            repeating-linear-gradient(
-                90deg, 
-                rgba(0,0,0,0.05) 0px, 
-                rgba(0,0,0,0.05) 80px, 
-                transparent 80px, 
-                transparent 85px
-            );
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: repeating-linear-gradient(90deg,
+                    transparent 0px,
+                    transparent 40px,
+                    rgba(0, 0, 0, 0.2) 40px,
+                    rgba(0, 0, 0, 0.2) 42px),
+                repeating-linear-gradient(90deg,
+                    rgba(0, 0, 0, 0.05) 0px,
+                    rgba(0, 0, 0, 0.05) 80px,
+                    transparent 80px,
+                    transparent 85px);
             opacity: 0.6;
             filter: blur(1px);
         }
@@ -90,15 +93,26 @@
             height: 80px;
             background: linear-gradient(to right, #c2b9a7, #e8dfcd 20%, #dcd1bd 80%, #7a7261);
             border-radius: 3px;
-            box-shadow: 
-                inset 0 -10px 20px rgba(0,0,0,0.8),
-                15px 15px 20px rgba(0,0,0,0.9);
+            box-shadow:
+                inset 0 -10px 20px rgba(0, 0, 0, 0.8),
+                15px 15px 20px rgba(0, 0, 0, 0.9);
             z-index: 2;
         }
-        
-        .candle.small { width: 25px; height: 50px; }
-        .candle.tall { width: 35px; height: 110px; }
-        .candle.melted { height: 60px; border-radius: 5px 3px 3px 3px; }
+
+        .candle.small {
+            width: 25px;
+            height: 50px;
+        }
+
+        .candle.tall {
+            width: 35px;
+            height: 110px;
+        }
+
+        .candle.melted {
+            height: 60px;
+            border-radius: 5px 3px 3px 3px;
+        }
 
         .candle::before {
             content: '';
@@ -109,7 +123,7 @@
             height: 14px;
             background: radial-gradient(ellipse at center, #f5ecd6 0%, #d4cbb8 60%, #8a826e 100%);
             border-radius: 50%;
-            box-shadow: inset 0 0 6px rgba(0,0,0,0.6);
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
         }
 
         .candle::after {
@@ -121,8 +135,9 @@
             height: 25px;
             background: #e8dfcd;
             border-radius: 3px;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
         }
+
         .candle.tall::after {
             left: auto;
             right: -2px;
@@ -150,7 +165,7 @@
             height: 32px;
             background: radial-gradient(ellipse at bottom, #ffffff 10%, #ffe100 40%, #ff6a00 80%, transparent 100%);
             border-radius: 50% 50% 20% 20%;
-            box-shadow: 
+            box-shadow:
                 0 -5px 25px 10px rgba(255, 140, 0, 0.5),
                 0 0 45px 20px rgba(255, 208, 0, 0.3);
             animation: flicker 0.15s infinite alternate;
@@ -159,12 +174,35 @@
         }
 
         @keyframes flicker {
-            0% { transform: translateX(-50%) scale(1) skewX(2deg); opacity: 0.9; }
-            20% { transform: translateX(-50%) scale(1.05) skewX(-2deg); opacity: 1; }
-            40% { transform: translateX(-50%) scale(0.95) skewX(1deg); opacity: 0.85; }
-            60% { transform: translateX(-50%) scale(1.02) skewX(-1deg); opacity: 0.95; }
-            80% { transform: translateX(-50%) scale(0.98) skewX(3deg); opacity: 0.9; }
-            100% { transform: translateX(-50%) scale(1) skewX(-2deg); opacity: 1; }
+            0% {
+                transform: translateX(-50%) scale(1) skewX(2deg);
+                opacity: 0.9;
+            }
+
+            20% {
+                transform: translateX(-50%) scale(1.05) skewX(-2deg);
+                opacity: 1;
+            }
+
+            40% {
+                transform: translateX(-50%) scale(0.95) skewX(1deg);
+                opacity: 0.85;
+            }
+
+            60% {
+                transform: translateX(-50%) scale(1.02) skewX(-1deg);
+                opacity: 0.95;
+            }
+
+            80% {
+                transform: translateX(-50%) scale(0.98) skewX(3deg);
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1) skewX(-2deg);
+                opacity: 1;
+            }
         }
 
         /* Sombras del libro sobre la mesa */
@@ -174,33 +212,36 @@
             left: 5%;
             width: 90%;
             height: 30px;
-            background: rgba(0,0,0,0.95);
+            background: rgba(0, 0, 0, 0.95);
             border-radius: 50%;
             filter: blur(15px);
             z-index: -1;
             transition: opacity 1.2s;
             pointer-events: none;
         }
+
         .book.open .book-shadow-closed {
             opacity: 0;
         }
-        
+
         .book-shadow-open {
             position: absolute;
             bottom: -35px;
             left: -90%;
             width: 280%;
             height: 50px;
-            background: radial-gradient(ellipse at center, rgba(0,0,0,0.8) 0%, transparent 60%);
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.8) 0%, transparent 60%);
             filter: blur(25px);
             z-index: -1;
             opacity: 0;
             transition: opacity 1.2s;
             pointer-events: none;
         }
+
         .book.open .book-shadow-open {
             opacity: 1;
         }
+
         /* --- FIN NUEVO --- */
 
         .book-wrapper {
@@ -604,90 +645,134 @@
         @media (max-width: 700px) {
             .book {
                 width: 45vw;
-                height: 64vw; /* Maintain 340/480 aspect ratio */
+                height: 64vw;
+                /* Maintain 340/480 aspect ratio */
             }
+
             .book.open {
                 transform: translateX(50%);
             }
+
             .cover-art {
                 padding: 4vw;
             }
+
             .gold-frame {
-                top: 3vw; left: 3vw; right: 3vw; bottom: 3vw;
+                top: 3vw;
+                left: 3vw;
+                right: 3vw;
+                bottom: 3vw;
             }
+
             .gold-frame-inner {
-                top: 5vw; left: 5vw; right: 5vw; bottom: 5vw;
+                top: 5vw;
+                left: 5vw;
+                right: 5vw;
+                bottom: 5vw;
             }
+
             .cover-art h1 {
                 font-size: 5.5vw;
                 margin-bottom: 2vw;
                 line-height: 1.3;
             }
+
             .cover-art .subtitle {
                 font-size: 4vw;
             }
+
             .cover-art .subtitle[style] {
                 font-size: 3.5vw !important;
                 margin-top: 1vw !important;
             }
+
             .ornament {
                 font-size: 6vw;
                 margin: 2vw 0;
             }
+
             h2 {
                 font-size: 5vw;
                 margin-bottom: 3vw;
             }
+
             h3 {
                 font-size: 3vw;
                 margin-bottom: 2vw;
                 letter-spacing: 1px;
             }
+
             p.text {
                 font-size: 3vw;
                 line-height: 1.5;
             }
+
             p.quote {
                 font-size: 4vw;
             }
+
             .btn {
                 margin-top: 5vw;
                 padding: 2.5vw 4vw;
                 font-size: 3vw;
             }
+
             .content {
                 padding: 8vw 4vw;
             }
+
             .turn-hint {
                 font-size: 2.8vw;
                 bottom: 3vw;
             }
-            .turn-hint.right { right: 3vw; }
-            .turn-hint.left { left: 3vw; }
+
+            .turn-hint.right {
+                right: 3vw;
+            }
+
+            .turn-hint.left {
+                left: 3vw;
+            }
+
             .page-number {
                 font-size: 3.5vw;
             }
-            .page-number.right { right: 50%; transform: translateX(50%); bottom: 3vw; }
-            .page-number.left { left: 50%; transform: translateX(-50%); bottom: 3vw; }
-            
+
+            .page-number.right {
+                right: 50%;
+                transform: translateX(50%);
+                bottom: 3vw;
+            }
+
+            .page-number.left {
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: 3vw;
+            }
+
             /* TOC Ajustes */
             .toc-list {
                 gap: 2.5vw;
                 margin-top: 4vw;
             }
+
             .toc-list li {
                 padding: 2vw;
             }
+
             .toc-list .chap-title {
                 font-size: 4.5vw;
             }
+
             .chap-title small {
                 font-size: 2.8vw;
             }
+
             .toc-list .chap-num {
                 font-size: 4vw;
                 margin-right: 2vw;
             }
+
             .lock-icon {
                 font-size: 3.5vw;
             }
@@ -699,49 +784,124 @@
                 bottom: 8%;
                 right: 8%;
             }
+
             .desk-container .envelope-container::before {
                 border-left: 30px solid transparent;
                 border-right: 30px solid transparent;
                 border-top: 25px solid #c2b9a7;
             }
+
             .desk-container .envelope-container::after {
                 border-left: 30px solid #e8dfcd;
                 border-right: 30px solid #e8dfcd;
                 border-bottom: 20px solid #d4cbb8;
             }
+
             .desk-container .wax-seal {
                 top: 15px;
                 width: 12px;
                 height: 12px;
             }
-            
+
+            /* Ajustes Responsive Spotify y Rosa */
+            .desk-container .spotify-container {
+                width: 80vw;
+                top: 5%;
+                left: 10vw;
+                bottom: auto;
+                transform: rotate(0deg);
+            }
+
+            .desk-container .rose-decoration {
+                font-size: 10vw;
+                bottom: 9%;
+                right: 38%;
+                left: auto;
+                transform: rotate(-10deg);
+            }
+
             /* Ajustes del modal de carta */
             #letterModal .letter-content {
                 padding: 20px 15px;
                 width: 90%;
-                max-height: 85vh; /* Limita la altura al 85% de la pantalla */
+                max-height: 85vh;
+                /* Limita la altura al 85% de la pantalla */
                 display: flex;
                 flex-direction: column;
                 overflow: hidden;
             }
+
             #letterModal .letter-content h2 {
                 font-size: 1.5rem;
                 margin-bottom: 10px;
-                flex-shrink: 0; /* El título no se encoge */
+                flex-shrink: 0;
+                /* El título no se encoge */
             }
+
             #letterModal .letter-content p {
-                font-size: 0.85rem !important; /* Forzamos letra pequeña */
+                font-size: 0.85rem !important;
+                /* Forzamos letra pequeña */
                 line-height: 1.4;
                 margin-bottom: 10px;
-                overflow-y: auto; /* Hace que SOLO el texto tenga scroll */
+                overflow-y: auto;
+                /* Hace que SOLO el texto tenga scroll */
                 flex-grow: 1;
-                padding-right: 5px; /* Espacio para la barra de scroll */
+                padding-right: 5px;
+                /* Espacio para la barra de scroll */
             }
+
             #letterModal .close-letter-btn {
-                flex-shrink: 0; /* El botón no se encoge */
+                flex-shrink: 0;
+                /* El botón no se encoge */
                 margin-top: 10px !important;
                 padding: 10px 20px;
                 font-size: 0.8rem;
+            }
+        }
+
+        /* --- ESTILOS DE SPOTIFY Y ROSA --- */
+        .spotify-container {
+            position: absolute;
+            top: 4%;
+            left: 3%;
+            width: 320px;
+            z-index: 4;
+            transform: rotate(-1deg);
+            box-shadow: 5px 10px 25px rgba(0, 0, 0, 0.8), inset 0 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+            background: linear-gradient(135deg, #4a2e1b 0%, #2a1508 100%);
+            padding: 8px;
+            border: 2px solid #5c3a21;
+            transition: transform 0.3s ease;
+        }
+
+        .spotify-container:hover {
+            transform: rotate(0deg) scale(1.02);
+            box-shadow: 8px 15px 35px rgba(0, 0, 0, 0.9);
+        }
+
+        .rose-decoration {
+            position: absolute;
+            bottom: 13%;
+            right: 32%;
+            left: auto;
+            font-size: 4rem;
+            z-index: 2;
+            transform: rotate(-10deg);
+            filter: drop-shadow(5px 10px 8px rgba(0, 0, 0, 0.7)) sepia(0.3) brightness(0.85);
+            pointer-events: none;
+            animation: float-rose 6s ease-in-out infinite;
+        }
+
+        @keyframes float-rose {
+
+            0%,
+            100% {
+                transform: rotate(-10deg) translateY(0);
+            }
+
+            50% {
+                transform: rotate(-13deg) translateY(-5px);
             }
         }
 
@@ -755,7 +915,7 @@
             background: #d4cbb8;
             border: 1px solid #8a826e;
             border-radius: 2px;
-            box-shadow: 3px 5px 15px rgba(0,0,0,0.8), inset 0 0 15px rgba(138, 130, 110, 0.4);
+            box-shadow: 3px 5px 15px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(138, 130, 110, 0.4);
             cursor: pointer;
             z-index: 3;
             transform: rotate(-12deg);
@@ -764,7 +924,7 @@
 
         .envelope-container:hover {
             transform: scale(1.05) rotate(-5deg);
-            box-shadow: 5px 8px 20px rgba(0,0,0,0.9), inset 0 0 15px rgba(255, 235, 180, 0.5);
+            box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(255, 235, 180, 0.5);
         }
 
         .envelope-container::before {
@@ -777,10 +937,10 @@
             border-left: 40px solid transparent;
             border-right: 40px solid transparent;
             border-top: 30px solid #c2b9a7;
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3));
             z-index: 2;
         }
-        
+
         .envelope-container::after {
             content: '';
             position: absolute;
@@ -804,13 +964,16 @@
             background: #8b0000;
             border-radius: 50%;
             z-index: 3;
-            box-shadow: inset 0 -2px 4px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.5);
+            box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .letter-modal {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -835,9 +998,10 @@
             padding: 40px 30px;
             width: 90%;
             max-width: 500px;
-            max-height: 85vh; /* NUNCA EXCEDERÁ LA PANTALLA */
+            max-height: 85vh;
+            /* NUNCA EXCEDERÁ LA PANTALLA */
             border-radius: 4px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
             transform: translateY(30px) scale(0.95);
             transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
             text-align: center;
@@ -861,14 +1025,17 @@
         .letter-content p {
             font-family: 'Lato', sans-serif;
             color: #4e342e;
-            font-size: 1.05rem; /* Letra un poco más pequeña globalmente */
+            font-size: 1.05rem;
+            /* Letra un poco más pequeña globalmente */
             line-height: 1.6;
             margin-bottom: 20px;
-            white-space: pre-wrap; /* Para respetar saltos de línea del mensaje */
-            overflow-y: auto; /* SCROLL AQUÍ PARA ESCRITORIO TAMBIÉN */
+
+            overflow-y: auto;
+            /* SCROLL AQUÍ PARA ESCRITORIO TAMBIÉN */
             flex-grow: 1;
-            padding-right: 15px; /* Espacio para el scrollbar */
-            text-align: left;
+            padding-right: 15px;
+            /* Espacio para el scrollbar */
+            text-align: justify;
         }
 
         .close-letter-btn {
@@ -902,7 +1069,7 @@
     <!-- Contenedor de la Mesa y Velas -->
     <div class="desk-container">
         <div class="desk-surface"></div>
-        
+
         <!-- Velas izquierda -->
         <div class="candle tall" style="bottom: 35%; left: 12%;">
             <div class="flame" style="animation-delay: 0.1s;"></div>
@@ -929,6 +1096,20 @@
         <div class="candle tall" style="bottom: 28%; right: 22%;">
             <div class="flame" style="animation-delay: 0.8s;"></div>
             <div class="wick"></div>
+        </div>
+
+        <!-- Rosa -->
+        <div class="rose-decoration">
+            🌹
+        </div>
+
+        <!-- Spotify / Tocadiscos -->
+        <div class="spotify-container">
+            <iframe style="border-radius:12px"
+                src="https://open.spotify.com/embed/track/2318Aoqig6HS9YkHGlAm8T?utm_source=generator&theme=0"
+                width="100%" height="152" frameBorder="0" allowfullscreen=""
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"></iframe>
         </div>
 
         <!-- Sobre de carta en la mesa -->
@@ -1049,19 +1230,7 @@
     <!-- Modal de la carta -->
     <div class="letter-modal" id="letterModal">
         <div class="letter-content">
-            <h2 style="font-style: italic;">Una Carta para Ti</h2>
-            <p id="letterMessage" style="text-align: left;">Mi amor,
-
-Ya estamos por cumplir un mes juntos, y sinceramente no puedo evitar sentirme feliz por todo lo que hemos vivido en tan poco tiempo. Desde que llegaste a mi vida, mis días se han vuelto más especiales, más tranquilos y mucho más felices.
-
-Tal vez sea solo un mes, pero para mí significa el inicio de algo muy bonito. Cada momento contigo, cada conversación, cada risa y cada detalle han hecho que este tiempo valga muchísimo.
-
-Por eso quiero invitarte a celebrar nuestro primer mes juntos, porque quiero seguir creando recuerdos contigo y disfrutar cada etapa de esta historia que estamos construyendo.
-
-Gracias por hacerme sentir tan bien a tu lado. Este será el primero de muchos meses más, te lo prometo.
-
-Con mucho cariño,
-Moor.</p>
+            <p id="letterMessage">Mi amor,<br><br>Ya estamos por cumplir un mes juntos, y sinceramente no puedo evitar sentirme feliz por todo lo que estamos viviendo y por todo lo bonito que aún nos falta por vivir. Desde que llegaste a mi vida, mis días se han vuelto más especiales, más tranquilos y mucho más felices.<br><br>Tal vez sea solo un mes, pero para mí significa el inicio de algo muy bonito. Cada momento contigo, cada conversación, cada risa y cada detalle han hecho que este tiempo valga muchísimo.<br><br>Por eso quiero invitarte a celebrar nuestro primer mes juntos, porque quiero seguir creando recuerdos contigo y disfrutar cada etapa de esta historia que estamos construyendo.<br><br>Gracias por hacerme sentir tan bien a tu lado. Este será el primero de muchos meses más, te lo prometo.<br><br>Con mucho cariño,<br>Moor.</p>
             <button class="close-letter-btn" onclick="closeLetter()" style="margin-top: 20px;">Cerrar Carta</button>
         </div>
     </div>
