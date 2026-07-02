@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historia para Chio</title>
+    <title>Mi princesa hemocha</title>
     <!-- Incluyendo fuentes elegantes -->
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700&display=swap"
@@ -1015,6 +1015,129 @@
             }
         }
 
+        /* --- ESTILOS DEL CAJÓN SECRETO --- */
+        .desk-drawer {
+            position: absolute;
+            bottom: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 190px;
+            background: linear-gradient(to bottom, #3e2211, #1a0b04);
+            border: 2px solid #1a0b04;
+            border-radius: 5px 5px 0 0;
+            box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.8), inset 0 5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), filter 2.5s ease-in-out;
+            display: flex;
+            justify-content: center;
+        }
+
+        .desk-drawer.open {
+            transform: translateX(-50%) translateY(-120px);
+        }
+
+        .drawer-handle {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 25px;
+            background: linear-gradient(to bottom, #b38b4d, #7a5c2e);
+            border-radius: 6px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            z-index: 22;
+            transition: filter 0.3s;
+        }
+
+        .drawer-handle:hover {
+            filter: brightness(1.2);
+        }
+
+        .drawer-handle::after {
+            content: 'Cajón';
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Playfair Display', serif;
+            font-size: 0.8rem;
+            color: rgba(223, 189, 105, 0.6);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .drawer-handle:hover::after {
+            opacity: 1;
+        }
+
+        .drawer-inside {
+            position: absolute;
+            bottom: 0;
+            left: 5%;
+            width: 90%;
+            height: 150px;
+            background: #0a0402;
+            box-shadow: inset 0 15px 20px rgba(0, 0, 0, 0.95);
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        body.lights-off .desk-drawer {
+            filter: brightness(0.2);
+        }
+
+        .desk-drawer .rose-decoration {
+            position: relative !important;
+            bottom: auto !important;
+            right: auto !important;
+            left: auto !important;
+            font-size: 3.5rem !important;
+            transform: rotate(-10deg) !important;
+            margin-bottom: 5px;
+        }
+
+        .desk-drawer .envelope-container {
+            position: relative !important;
+            bottom: auto !important;
+            right: auto !important;
+            left: auto !important;
+            transform: rotate(5deg) !important;
+            margin-top: 15px;
+        }
+
+        .desk-drawer .envelope-container:hover {
+            transform: scale(1.05) rotate(0deg) !important;
+        }
+
+        @media (max-width: 700px) {
+            .desk-drawer {
+                width: 80vw;
+            }
+        }
+
+        /* --- MANDO DE PLAYSTATION --- */
+        .ps-controller {
+            font-size: 3.5rem;
+            transform: rotate(-15deg);
+            text-decoration: none;
+            filter: drop-shadow(5px 10px 8px rgba(0, 0, 0, 0.7)) brightness(0.8);
+            transition: transform 0.3s ease, filter 0.3s ease;
+            position: relative;
+            bottom: -5px;
+        }
+
+        .ps-controller:hover {
+            transform: rotate(0deg) scale(1.1);
+            filter: drop-shadow(8px 15px 12px rgba(0, 0, 0, 0.9)) brightness(1.1);
+        }
+
         /* --- ESTILOS DE LA CARTA --- */
         .envelope-container {
             position: absolute;
@@ -1238,7 +1361,7 @@
     </style>
 </head>
 
-<body class="lights-off">
+<body class="">
 
     <!-- Ambiente oscuro superpuesto -->
     <div class="ambient-darkness"></div>
@@ -1275,28 +1398,27 @@
             <div class="wick"></div>
         </div>
 
-        <!-- Rosa -->
-        <div class="rose-decoration" onclick="rainHearts()">
-            🌹
-        </div>
 
-        <!-- Spotify / Tocadiscos -->
-        <div class="spotify-container">
-            <iframe style="border-radius:12px"
-                src="https://open.spotify.com/embed/track/2318Aoqig6HS9YkHGlAm8T?utm_source=generator&theme=0"
-                width="100%" height="152" frameBorder="0" allowfullscreen=""
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"></iframe>
-        </div>
 
-        <!-- Sobre de carta en la mesa -->
-        <div class="envelope-container" onclick="openLetter()">
-            <div class="wax-seal"></div>
+            </div>
         </div>
+    </div>
 
-        <!-- Caja de cerillos para encender -->
-        <div class="matchbox" id="matchboxContainer" onclick="lightUpRoom()">
-            <div class="matchbox-label">Encender Velas</div>
+    <!-- Cajón Secreto (movido fuera de desk-container para que su z-index sobrepase al libro) -->
+    <div class="desk-drawer" id="secretDrawer">
+        <div class="drawer-handle" onclick="toggleDrawer()"></div>
+        <div class="drawer-inside">
+            <!-- Mando de PlayStation (Juego) -->
+            <a href="Juego.html" class="ps-controller" title="Jugar Minijuego">🎮</a>
+
+            <!-- Rosa -->
+            <div class="rose-decoration" onclick="rainHearts()">
+                🌹
+            </div>
+            <!-- Sobre de carta -->
+            <div class="envelope-container" onclick="openLetter()">
+                <div class="wax-seal"></div>
+            </div>
         </div>
     </div>
 
@@ -1426,20 +1548,14 @@
     </div>
 
     <script>
+        // Función del cajón
+        function toggleDrawer() {
+            document.getElementById('secretDrawer').classList.toggle('open');
+        }
+
         // Funciones de la carta
         function openLetter() {
             document.getElementById('letterModal').classList.add('active');
-        }
-
-        // Encender la magia
-        function lightUpRoom() {
-            document.body.classList.remove('lights-off');
-            const matchbox = document.getElementById('matchboxContainer');
-            if (matchbox) {
-                matchbox.style.opacity = '0';
-                matchbox.style.pointerEvents = 'none';
-                setTimeout(() => matchbox.remove(), 1000);
-            }
         }
 
         function closeLetter() {
