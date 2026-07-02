@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Pingüina</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #b3d4ff; /* Cielo de invierno */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Lato', sans-serif;
+            user-select: none;
+        }
+
+        #gameCanvas {
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .hidden { display: none !important; }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            pointer-events: auto;
+            border: 2px solid #ffb6c1;
+            max-width: 90%;
+        }
+
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+            color: #d1477a;
+            margin-top: 0;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            background: #ff6699;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            font-family: 'Lato', sans-serif;
+            font-weight: bold;
+            margin: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background: #ff4d88;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #ff6699;
+            border: 2px solid #ff6699;
+        }
+
+        .btn-outline:hover {
+            background: #fff0f5;
+            color: #ff4d88;
+        }
+
+        #scoreBoard {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #d1477a;
+            background: rgba(255,255,255,0.7);
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 2px solid white;
+        }
+
+        #heartsContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 5;
+        }
+
+        .heart-float {
+            position: absolute;
+            bottom: -50px;
+            font-size: 2rem;
+            animation: floatUp 3s ease-in forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+    <div id="scoreBoard">Rosas: <span id="roseCount">0</span>/3</div>
+
+    <div id="heartsContainer"></div>
+
+    <!-- Pantalla de Inicio -->
+    <div class="ui-layer" id="startScreen">
+        <div class="panel">
+            <h1>Mi Pingüina</h1>
+            <p>Esquiva obstáculos y recoge las 3 rosas para ganar el juego.</p>
+            <p style="font-size: 0.9rem; color: #666;">Toca arriba/Espacio para saltar. Toca abajo/Flecha Abajo para agacharte.</p>
+            <button class="btn" onclick="startGame()">Comenzar</button>
+            <a href="index.html" class="btn btn-outline">Volver al Escritorio</a>
+        </div>
+    </div>
+
+    <!-- Pantalla de Game Over -->
+    <div class="ui-layer hidden" id="gameOverScreen">
+        <div class="panel">
+            <h2>¡Cuidado con el hielo!</h2>
+            <p>No te rindas, tu pingüinito te está esperando.</p>
+            <button class="btn" onclick="resetGame()">Reintentar</button>
+            <a href="index.html" class="btn btn-outline">Volver al Escritorio</a>
+        </div>
+    </div>
+
+    <!-- Pantalla de Victoria -->
+    <div class="ui-layer hidden" id="victoryScreen">
+        <div class="panel" style="background: #fff0f5; border-color: #ff1493;">
+            <h1 style="color: #ff1493; font-size: 2.5rem;">Ganaste</h1>
+            <p style="font-size: 1.5rem; font-style: italic; color: #c71585;">Eres la mejor enamorada del mundo.<br>Te quiero mucho ❤️</p>
+            <button class="btn" onclick="resetGame()">Jugar de nuevo</button>
+            <a href="index.html" class="btn btn-outline">Volver al Escritorio</a>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Referencias a UI
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const victoryScreen = document.getElementById('victoryScreen');
+        const roseCountDisplay = document.getElementById('roseCount');
+        const heartsContainer = document.getElementById('heartsContainer');
+
+        // Estado del juego
+        let gameState = 'START'; // START, PLAYING, GAMEOVER, VICTORY_WALK, VICTORY
+        let animationId;
+        let frameCount = 0;
+        let rosesCollected = 0;
+
+        // Variables de entorno
+        const groundY = 320;
+        let gameSpeed = 5;
+
+        // Configuración de la Pingüina (Jugador)
+        const player = {
+            x: 50,
+            y: groundY - 60,
+            width: 40,
+            height: 60,
+            dy: 0,
+            jumpForce: -13,
+            gravity: 0.6,
+            grounded: false,
+            crouching: false
+        };
+
+        // Arrays para entidades
+        let obstacles = [];
+        let roses = [];
+        let snowflakes = [];
+
+        // Pingüino Macho (Meta)
+        const malePenguin = {
+            x: 850, // Empieza fuera de la pantalla
+            y: groundY - 60,
+            width: 40,
+            height: 60,
+            active: false
+        };
+
+        // Generar nieve del fondo
+        for(let i=0; i<50; i++) {
+            snowflakes.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 3 + 1,
+                speed: Math.random() * 2 + 1
+            });
+        }
+
+        // --- DIBUJADO DE ENTIDADES ---
+
+        function drawPenguin(x, y, isFemale) {
+            ctx.save();
+            
+            if (isFemale && player.crouching) {
+                // Pingüina agachada
+                ctx.fillStyle = '#111';
+                ctx.beginPath();
+                ctx.ellipse(x + 20, y + 15, 25, 15, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#FFF';
+                ctx.beginPath();
+                ctx.ellipse(x + 20, y + 20, 18, 10, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#111';
+                ctx.beginPath();
+                ctx.arc(x + 40, y + 15, 12, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#FFF';
+                ctx.beginPath();
+                ctx.arc(x + 37, y + 12, 3, 0, Math.PI * 2);
+                ctx.arc(x + 45, y + 12, 3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(x + 37, y + 12, 1.5, 0, Math.PI * 2);
+                ctx.arc(x + 45, y + 12, 1.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#FFA500';
+                ctx.beginPath();
+                ctx.moveTo(x + 39, y + 16);
+                ctx.lineTo(x + 47, y + 16);
+                ctx.lineTo(x + 43, y + 22);
+                ctx.fill();
+
+                ctx.fillStyle = '#FFA500';
+                ctx.beginPath();
+                ctx.ellipse(x + 5, y + 28, 8, 4, 0, 0, Math.PI * 2);
+                ctx.ellipse(x + 15, y + 28, 8, 4, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#ff69b4';
+                ctx.fillRect(x + 25, y + 10, 10, 20); // Chalina
+            } else {
+                // Pingüino de pie
+                ctx.fillStyle = '#111';
+                ctx.beginPath();
+                ctx.ellipse(x + 20, y + 35, 20, 25, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#FFF';
+                ctx.beginPath();
+                ctx.ellipse(x + 20, y + 40, 14, 18, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#111';
+                ctx.beginPath();
+                ctx.arc(x + 20, y + 15, 15, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#FFF';
+                ctx.beginPath();
+                ctx.arc(x + 14, y + 12, 4, 0, Math.PI * 2);
+                ctx.arc(x + 26, y + 12, 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(x + 14, y + 12, 2, 0, Math.PI * 2);
+                ctx.arc(x + 26, y + 12, 2, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#FFA500';
+                ctx.beginPath();
+                ctx.moveTo(x + 15, y + 18);
+                ctx.lineTo(x + 25, y + 18);
+                ctx.lineTo(x + 20, y + 24);
+                ctx.fill();
+
+                ctx.fillStyle = '#FFA500';
+                ctx.beginPath();
+                ctx.ellipse(x + 10, y + 60, 8, 4, 0, 0, Math.PI * 2);
+                ctx.ellipse(x + 30, y + 60, 8, 4, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (isFemale) {
+                    ctx.fillStyle = '#ff69b4';
+                    ctx.fillRect(x + 5, y + 25, 30, 8); 
+                    ctx.fillRect(x + 22, y + 33, 8, 20); 
+                } else {
+                    ctx.fillStyle = '#e31b23';
+                    ctx.beginPath();
+                    ctx.moveTo(x + 20, y + 28);
+                    ctx.lineTo(x + 12, y + 23);
+                    ctx.lineTo(x + 12, y + 33);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.moveTo(x + 20, y + 28);
+                    ctx.lineTo(x + 28, y + 23);
+                    ctx.lineTo(x + 28, y + 33);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(x + 20, y + 28, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            ctx.restore();
+        }
+
+        function drawObstacle(obs) {
+            ctx.save();
+            ctx.font = "40px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "bottom";
+            ctx.fillText(obs.type, obs.x + obs.width/2, obs.y + obs.height);
+            ctx.restore();
+        }
+
+        function drawRose(rose) {
+            ctx.save();
+            ctx.font = "35px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            // Animación de flotar suave
+            const floatY = Math.sin(frameCount * 0.05) * 5;
+            ctx.fillText("🌹", rose.x + rose.width/2, rose.y + rose.height/2 + floatY);
+            ctx.restore();
+        }
+
+        function drawEnvironment() {
+            // Nieve cayendo
+            ctx.fillStyle = '#FFF';
+            snowflakes.forEach(snow => {
+                ctx.beginPath();
+                ctx.arc(snow.x, snow.y, snow.radius, 0, Math.PI*2);
+                ctx.fill();
+                
+                if(gameState === 'PLAYING' || gameState === 'VICTORY_WALK') {
+                    snow.y += snow.speed;
+                    snow.x -= 1; // Viento
+                    if(snow.y > canvas.height) {
+                        snow.y = -5;
+                        snow.x = Math.random() * canvas.width;
+                    }
+                }
+            });
+
+            // Suelo de nieve
+            ctx.fillStyle = '#F0F8FF';
+            ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+            
+            // Línea superior del hielo
+            ctx.fillStyle = '#E0FFFF';
+            ctx.fillRect(0, groundY, canvas.width, 10);
+        }
+
+        // --- LÓGICA DEL JUEGO ---
+
+        function crouch(isCrouching) {
+            if (gameState === 'PLAYING') {
+                player.crouching = isCrouching;
+                if (isCrouching) {
+                    player.height = 30;
+                    if (!player.grounded) {
+                        player.dy += 5; // Cae más rápido
+                    } else {
+                        player.y = groundY - 30;
+                    }
+                } else {
+                    player.height = 60;
+                    if (player.grounded) {
+                        player.y = groundY - 60;
+                    }
+                }
+            }
+        }
+
+        function jump() {
+            if (gameState === 'PLAYING' && player.grounded && !player.crouching) {
+                player.dy = player.jumpForce;
+                player.grounded = false;
+            }
+        }
+
+        function spawnObstacle() {
+            const types = ['🧊', '⛄', '🌲', '🦅'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            const isFlying = type === '🦅';
+            obstacles.push({
+                x: canvas.width,
+                y: isFlying ? groundY - 75 : groundY - 40,
+                width: 30,
+                height: 40,
+                type: type
+            });
+        }
+
+        function spawnRose() {
+            roses.push({
+                x: canvas.width,
+                y: groundY - 110 - (Math.random() * 50), // Altura para saltar
+                width: 35,
+                height: 35
+            });
+        }
+
+        function update() {
+            // Física del jugador
+            player.dy += player.gravity;
+            player.y += player.dy;
+
+            if (player.y + player.height >= groundY) {
+                player.y = groundY - player.height;
+                player.dy = 0;
+                player.grounded = true;
+            }
+
+            if (gameState === 'PLAYING') {
+                
+                // Generar rosas cada cierto tiempo hasta tener las 3
+                if (frameCount % 400 === 0 && rosesCollected < 3 && !malePenguin.active) {
+                    spawnRose();
+                }
+
+                // Generar obstáculos aleatorios, siempre y cuando no hayamos ganado
+                if (frameCount % 130 === 0 && frameCount > 100 && !malePenguin.active) {
+                    // Evitamos que spawneen justo en el mismo frame que una rosa
+                    if (frameCount % 400 !== 0) {
+                         spawnObstacle();
+                    }
+                }
+
+                // Mover obstáculos
+                obstacles.forEach((obs, index) => {
+                    obs.x -= gameSpeed;
+                    
+                    // Colisión con jugador
+                    const hitMargin = 10;
+                    if (player.x + hitMargin < obs.x + obs.width - hitMargin &&
+                        player.x + player.width - hitMargin > obs.x + hitMargin &&
+                        player.y + hitMargin < obs.y + obs.height - hitMargin &&
+                        player.y + player.height - hitMargin > obs.y + hitMargin) {
+                            gameOver();
+                    }
+
+                    if (obs.x + obs.width < 0) {
+                        obstacles.splice(index, 1);
+                    }
+                });
+
+                // Mover rosas
+                roses.forEach((rose, index) => {
+                    rose.x -= gameSpeed;
+
+                    // Colisión con rosa
+                    if (player.x < rose.x + rose.width &&
+                        player.x + player.width > rose.x &&
+                        player.y < rose.y + rose.height &&
+                        player.y + player.height > rose.y) {
+                            roses.splice(index, 1);
+                            rosesCollected++;
+                            roseCountDisplay.innerText = rosesCollected;
+                            // Efecto de recolección
+                            createHeart(rose.x, rose.y);
+
+                            // Si justo recogimos la última rosa, activamos el final
+                            if (rosesCollected === 3) {
+                                malePenguin.active = true;
+                                // Limpiamos obstáculos que están por delante para asegurar un final tranquilo
+                                obstacles = obstacles.filter(o => o.x < player.x); 
+                            }
+                    } else if (rose.x + rose.width < 0) {
+                        // Eliminar rosa si se sale de la pantalla para que pueda aparecer otra
+                        roses.splice(index, 1);
+                    }
+                });
+
+                // Acercar pingüino macho y transicionar a escena final
+                if (malePenguin.active) {
+                    malePenguin.x -= gameSpeed;
+                    if (malePenguin.x <= 600) {
+                        gameState = 'VICTORY_WALK';
+                    }
+                }
+            } else if (gameState === 'VICTORY_WALK') {
+                // Caminar al abrazo
+                player.x += 2;
+                if (player.x + player.width >= malePenguin.x + 10) {
+                    winGame();
+                }
+            }
+
+            frameCount++;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawEnvironment();
+
+            if (malePenguin.active || gameState === 'VICTORY_WALK' || gameState === 'VICTORY') {
+                drawPenguin(malePenguin.x, malePenguin.y, false);
+            }
+
+            obstacles.forEach(drawObstacle);
+            roses.forEach(drawRose);
+            
+            drawPenguin(player.x, player.y, true);
+        }
+
+        function gameLoop() {
+            if (gameState !== 'GAMEOVER') {
+                update();
+                draw();
+            }
+            animationId = requestAnimationFrame(gameLoop);
+        }
+
+        // --- CONTROLADORES DE ESTADO ---
+
+        function startGame() {
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            victoryScreen.classList.add('hidden');
+            resetVariables();
+            gameState = 'PLAYING';
+        }
+
+        function resetGame() {
+            gameOverScreen.classList.add('hidden');
+            victoryScreen.classList.add('hidden');
+            heartsContainer.innerHTML = '';
+            resetVariables();
+            gameState = 'PLAYING';
+        }
+
+        function resetVariables() {
+            player.y = groundY - player.height;
+            player.dy = 0;
+            player.x = 50;
+            obstacles = [];
+            roses = [];
+            frameCount = 0;
+            rosesCollected = 0;
+            roseCountDisplay.innerText = "0";
+            malePenguin.active = false;
+            malePenguin.x = 850;
+        }
+
+        function gameOver() {
+            gameState = 'GAMEOVER';
+            gameOverScreen.classList.remove('hidden');
+        }
+
+        function winGame() {
+            gameState = 'VICTORY';
+            // Lluvia de corazones al ganar
+            for(let i=0; i<20; i++) {
+                setTimeout(() => {
+                    createHeart(malePenguin.x, player.y, true);
+                }, i * 150);
+            }
+            setTimeout(() => {
+                victoryScreen.classList.remove('hidden');
+            }, 1500);
+        }
+
+        function createHeart(x, y, randomPosition = false) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-float');
+            heart.innerText = '❤️';
+            
+            const rect = canvas.getBoundingClientRect();
+            let screenX = rect.left + (x * (rect.width / canvas.width));
+            
+            if (randomPosition) {
+                screenX += (Math.random() * 100 - 50); 
+            }
+            
+            heart.style.left = screenX + 'px';
+            heartsContainer.appendChild(heart);
+
+            setTimeout(() => { heart.remove(); }, 3000);
+        }
+
+        // --- CONTROLES ---
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'ArrowUp') {
+                if (gameState === 'START') startGame();
+                else jump();
+            }
+            if (e.code === 'ArrowDown') {
+                crouch(true);
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.code === 'ArrowDown') {
+                crouch(false);
+            }
+        });
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault(); 
+            if (gameState === 'START') startGame();
+            else {
+                const touchY = e.touches[0].clientY;
+                const rect = canvas.getBoundingClientRect();
+                if (touchY - rect.top > rect.height / 2) {
+                    crouch(true); // Toca la mitad inferior
+                } else {
+                    jump(); // Toca la mitad superior
+                }
+            }
+        });
+
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            crouch(false);
+        });
+
+        canvas.addEventListener('mousedown', (e) => {
+            if (gameState === 'START') startGame();
+            else jump();
+        });
+
+        // Inicializar render antes de jugar
+        drawEnvironment();
+        drawPenguin(player.x, player.y, true);
+        gameLoop();
+
+    </script>
+</body>
+</html>
