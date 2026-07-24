@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi princesa hemocha</title>
+    <title>Historia para mi Princesa Hemocha</title>
     <!-- Incluyendo fuentes elegantes -->
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700&display=swap"
@@ -1434,7 +1434,8 @@
                     <div class="content center-content">
                         <h3>Capítulo 3</h3>
                         <h2>Oxapampa</h2>
-                        <p class="quote" style="font-size: 1.2rem; margin-top:20px;">(Próximamente...)</p>
+                        <p class="text">Nuestro refugio de paz, donde el tiempo se detuvo y fuimos inmensamente felices.</p>
+                        <a href="Capitulo3.html" class="btn" onclick="window.location.href='Capitulo3.html'; event.stopPropagation(); return false;">Abrir Oxapampa</a>
                     </div>
                     <div class="page-number right">5</div>
                 </div>
@@ -1507,18 +1508,17 @@
                     <div class="content" onclick="event.stopPropagation()">
                         <h3 style="color: #dfbd69;">Índice</h3>
                         <ul class="toc-list">
-                            <li onclick="goToChapter('Capitulo1.html')">
+                            <li onclick="goToChapter(1)">
                                 <span class="chap-num">I.</span>
                                 <span class="chap-title">El Atardecer</span>
                             </li>
-                            <li onclick="goToChapter('Capitulo2.html')">
+                            <li onclick="goToChapter(2)">
                                 <span class="chap-num">II.</span>
                                 <span class="chap-title">El Nevado</span>
                             </li>
-                            <li class="locked">
+                            <li onclick="goToChapter(3)">
                                 <span class="chap-num">III.</span>
-                                <span class="chap-title">Oxapampa <small>(Próximamente...)</small></span>
-                                <span class="lock-icon">🔒</span>
+                                <span class="chap-title">Oxapampa</span>
                             </li>
                         </ul>
                     </div>
@@ -1562,8 +1562,17 @@
             document.getElementById('letterModal').classList.remove('active');
         }
 
-        function goToChapter(url) {
-            window.location.href = url;
+        function goToChapter(chapterNum) {
+            if (chapterNum === 1) {
+                unflipPage('page1');
+                unflipPage('page2');
+            } else if (chapterNum === 2) {
+                flipPage('page1');
+                unflipPage('page2');
+            } else if (chapterNum === 3) {
+                flipPage('page1');
+                setTimeout(() => flipPage('page2'), 150);
+            }
         }
         const book = document.getElementById('book');
 
