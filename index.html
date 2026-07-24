@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historia para mi Princesa Hemocha</title>
+    <title>Mi bebé Hemocha</title>
     <!-- Incluyendo fuentes elegantes -->
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700&display=swap"
@@ -669,16 +669,8 @@
             border-bottom: 1px dotted rgba(223, 189, 105, 0.4);
             display: flex;
             align-items: center;
-            cursor: pointer;
             color: #d4af37;
             /* Oro antiguo en cuero oscuro */
-            transition: all 0.3s;
-        }
-
-        .toc-list li:hover {
-            color: #fff1b8;
-            transform: translateX(5px);
-            background: linear-gradient(90deg, rgba(223, 189, 105, 0.1), transparent);
         }
 
         .toc-list .locked {
@@ -1429,19 +1421,27 @@
             <div class="book-shadow-open"></div>
 
             <!-- HOJA NUEVA: CAPÍTULO 3 -->
-            <div class="page base-page" id="page3" data-z="-2" style="transform: translateZ(-2px);">
+            <div class="page" id="page3" style="transform: translateZ(-2px)">
                 <div class="front paper">
                     <div class="content center-content">
                         <h3>Capítulo 3</h3>
                         <h2>Oxapampa</h2>
                         <p class="text">Nuestro refugio de paz, donde el tiempo se detuvo y fuimos inmensamente felices.</p>
-                        <a href="Capitulo3.html" class="btn" onclick="window.location.href='Capitulo3.html'; event.stopPropagation(); return false;">Abrir Oxapampa</a>
+                        <a href="Capitulo3.html" class="btn" onclick="event.stopPropagation()">Abrir Oxapampa</a>
                     </div>
+                    <div class="turn-hint right">Siguiente ❯</div>
                     <div class="page-number right">5</div>
+                </div>
+                <div class="back paper" onclick="goBack('page3')">
+                    <div class="content center-content">
+                    </div>
+                    <div class="turn-hint left" onclick="goBack('page3')"
+                        style="pointer-events: auto; cursor: pointer; position: absolute; bottom: 20px; left: 20px;">❮ Anterior</div>
+                    <div class="page-number left">6</div>
                 </div>
             </div>
 
-            <div class="page" id="page2" data-z="0" style="transform: translateZ(0px);">
+            <div class="page" id="page2" style="transform: translateZ(0px)">
                 <div class="front paper" onclick="flipPage('page2')">
                     <div class="content">
                         <h3>Capítulo 2</h3>
@@ -1454,16 +1454,16 @@
                     <div class="page-number right">3</div>
                 </div>
                 <!-- Reverso de la página del Nevado -->
-                <div class="back paper" onclick="unflipPage('page2')">
+                <div class="back paper" onclick="goBack('page2')">
                     <div class="content center-content">
-                        <p class="quote">"Una promesa en la nieve"</p>
                     </div>
-                    <div class="turn-hint left">❮ Anterior</div>
+                    <div class="turn-hint left" onclick="goBack('page2')"
+                        style="pointer-events: auto; cursor: pointer; position: absolute; bottom: 20px; left: 20px;">❮ Anterior</div>
                     <div class="page-number left">4</div>
                 </div>
             </div>
 
-            <div class="page" id="page1" data-z="2" style="transform: translateZ(2px);">
+            <div class="page" id="page1" style="transform: translateZ(2px)">
                 <div class="front paper" onclick="flipPage('page1')">
                     <div class="content">
                         <h3>Capítulo 1</h3>
@@ -1474,16 +1474,16 @@
                     <div class="turn-hint right">Siguiente ❯</div>
                     <div class="page-number right">1</div>
                 </div>
-                <div class="back paper" onclick="unflipPage('page1')">
+                <div class="back paper" onclick="goBack('page1')">
                     <div class="content center-content">
-                        <p class="quote">"Érase un Atardecer..."</p>
                     </div>
-                    <div class="turn-hint left">❮ Anterior</div>
+                    <div class="turn-hint left" onclick="goBack('page1')"
+                        style="pointer-events: auto; cursor: pointer; position: absolute; bottom: 20px; left: 20px;">❮ Anterior</div>
                     <div class="page-number left">2</div>
                 </div>
             </div>
 
-            <div class="page cover" id="cover" data-z="4" style="transform: translateZ(4px);">
+            <div class="page cover" id="cover" style="transform: translateZ(4px)">
                 <div class="front cover-art" onclick="flipPage('cover')">
 
                     <!-- Decoración exterior dorada del libro -->
@@ -1504,26 +1504,26 @@
                     <div class="turn-hint right"></div>
                 </div>
 
-                <div class="back cover-inside" onclick="unflipPage('cover')">
+                <div class="back cover-inside" onclick="closeBook()">
                     <div class="content" onclick="event.stopPropagation()">
-                        <h3 style="color: #dfbd69;">Índice</h3>
+                        <h3>Índice</h3>
                         <ul class="toc-list">
-                            <li onclick="goToChapter(1)">
-                                <span class="chap-num">I.</span>
-                                <span class="chap-title">El Atardecer</span>
+                            <li>
+                                <span class="chap-num">I</span>
+                                <span class="chap-title">El Atardecer <small>— Donde todo comenzó</small></span>
                             </li>
-                            <li onclick="goToChapter(2)">
-                                <span class="chap-num">II.</span>
-                                <span class="chap-title">El Nevado</span>
+                            <li>
+                                <span class="chap-num">II</span>
+                                <span class="chap-title">El Nevado <small>— Una promesa de hielo y cielo</small></span>
                             </li>
-                            <li onclick="goToChapter(3)">
-                                <span class="chap-num">III.</span>
-                                <span class="chap-title">Oxapampa</span>
+                            <li>
+                                <span class="chap-num">III</span>
+                                <span class="chap-title">Oxapampa <small>— Nuestro refugio de paz</small></span>
                             </li>
                         </ul>
-                    </div>
-                    <div class="turn-hint left" onclick="unflipPage('cover')"
-                        style="pointer-events: auto; cursor: pointer; text-decoration: underline;">❮ Cerrar el libro
+                        <div class="turn-hint left" onclick="closeBook()"
+                            style="pointer-events: auto; cursor: pointer; text-decoration: underline; position: absolute; bottom: 20px; left: 20px;">❮ Cerrar el libro
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1576,20 +1576,21 @@
         }
         const book = document.getElementById('book');
 
+        const pageZ = { cover: 4, page1: 2, page2: 0, page3: -2 };
+        const FLIPPED_Z = -6;
+
         function flipPage(id) {
             const page = document.getElementById(id);
             if (!book.classList.contains('open')) {
                 book.classList.add('open');
             }
-            let z = page.getAttribute('data-z') || "0";
-            page.style.transform = `rotateY(-180deg) translateZ(${z}px)`;
+            page.style.transform = 'translateZ(' + FLIPPED_Z + 'px) rotateY(-180deg)';
             page.classList.add('flipped');
         }
 
         function unflipPage(id) {
             const page = document.getElementById(id);
-            let z = page.getAttribute('data-z') || "0";
-            page.style.transform = `rotateY(0deg) translateZ(${z}px)`;
+            page.style.transform = 'translateZ(' + pageZ[id] + 'px) rotateY(0deg)';
             page.classList.remove('flipped');
             setTimeout(() => {
                 const flippedPages = document.querySelectorAll('.flipped');
@@ -1597,6 +1598,31 @@
                     book.classList.remove('open');
                 }
             }, 50);
+        }
+
+        function goBack(fromId) {
+            if (fromId === 'page3') {
+                unflipPage('page3');
+                setTimeout(() => unflipPage('page2'), 300);
+            } else if (fromId === 'page2') {
+                unflipPage('page2');
+                setTimeout(() => unflipPage('page1'), 300);
+            } else if (fromId === 'page1') {
+                unflipPage('page1');
+                setTimeout(() => unflipPage('cover'), 300);
+            }
+        }
+
+        function closeBook() {
+            const order = ['page3', 'page2', 'page1', 'cover'];
+            let delay = 0;
+            for (const id of order) {
+                const page = document.getElementById(id);
+                if (page.classList.contains('flipped')) {
+                    setTimeout(() => unflipPage(id), delay);
+                    delay += 300;
+                }
+            }
         }
 
         function rainHearts() {
